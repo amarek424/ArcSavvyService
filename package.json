@@ -1,0 +1,27 @@
+{
+	"name": "ArcSavvy API",
+	"version": "1.0.0",
+	"description": "Node.js API using Express",
+	"engines": {
+		"node": "8.9.1"
+	},
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"bcrypt": "^3.0.0",
+		"body-parser": "^1.18.3",
+		"crypto": "^1.0.1",
+		"express": "^4.16.3",
+		"jsonwebtoken": "^8.3.0",
+		"mailgun": "^0.5.0",
+		"mailgun-js": "^0.20.0",
+		"mongoose": "^5.2.5",
+		"morgan": "^1.9.0",
+		"nodemon": "^1.18.3",
+		"package.json": "^2.0.1",
+		"passport": "^0.4.0",
+		"passport-jwt": "^4.0.0"
+	}
+}
