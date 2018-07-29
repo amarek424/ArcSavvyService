@@ -32,14 +32,14 @@ exports.registerUser = (req, res) => {
     // try to save new user
     newUser.save(function(err){
       if (err) {
-        return res.json({success: false, message: 'Email address already exists.'});
+        return res.json({success: false, message: 'Email address unavailable.'});
       }
 
 
       var message = {
         from: 'ArcSavvy <bdor528@gmail.com>',
         to: newUser.email,
-        subject: 'Veryify your ArcSavvy account now',
+        subject: 'ArcSavvy Account Verification',
         html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
       };
       mailgun.messages().send(message, function (err, body){
