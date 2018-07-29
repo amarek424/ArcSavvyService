@@ -1,5 +1,5 @@
 {
-	"name": "ArcSavvy API",
+	"name": "arcsavvy-api",
 	"version": "1.0.0",
 	"description": "Node.js API using Express",
 	"engines": {
