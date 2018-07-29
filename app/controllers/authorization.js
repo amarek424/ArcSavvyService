@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var crypto = require('crypto');
 var async = require('async');
+var bcrypt = require('bcrypt');
 var mailgun = require('mailgun-js')({apiKey: config.mailgunapikey, domain: config.mailgundomain});
 const user = require('../models/user');
 
@@ -112,24 +113,31 @@ exports.forgotPassword = (req, res) => {
       });
     },
     function(forgetfulUser, token, done) {
-      user.findOneAndUpdate({ _id: forgetfulUser._id }, { reset_password_token: token, reset_password_expires: Date.now() + 86400000 }, { upsert: true, new: true }).exec(function(err, new_user) {
-        done(err, token, new_user);
+      user.findOneAndUpdate({ email: forgetfulUser.email },
+        {
+          $set: {
+            reset_password_token: token,
+            reset_password_expires: (Date.now() + 86400000)
+          }
+        }, function(err, forgetfulUser) {
+          if (err || forgetfulUser == null){
+            return res.json({ success: true, message: 'User lookup error'});
+          }
+        done(err, token, forgetfulUser);
       });
     },
     function(token, forgetfulUser, done) {
-
       var message = {
         from: 'ArcSavvy <bdor528@gmail.com>',
         to: forgetfulUser.email,
         subject: 'Reset your ArcSavvy account password now',
-        text: 'Reset your password here http://localhost:8080/api/auth/reset_password?token=' + token
+        text: 'Reset your password here http://localhost:8080/api/auth/reset/' + token
       };
-
       mailgun.messages().send(message, function (err, body){
         if (err){
-          console.log(err)
+          return res.json({ success: false, message: 'Message error!'});
         }
-        console.log(body);
+        res.json({ success: true, message: 'Password reset link sent. Check your inbox.'});
       });
 
     }
@@ -139,48 +147,40 @@ exports.forgotPassword = (req, res) => {
 };
 
 
-exports.resetPassword = (req, res, next) => {
-  user.findOne({
-    reset_password_token: req.body.token,
-    reset_password_expires: {
-      $gt: Date.now()
+exports.resetPassword = (req, res) => {
+  user.findOne({email: req.body.email, reset_password_token: req.body.token}).exec(function(err, resetUser) {
+    if(err || resetUser == null){
+      res.json({ success: false, message: 'Token bad or expired!'})
     }
-  }).exec(function(err, forgetfulUser) {
-    if (!err && forgetfulUser) {
-      if (req.body.newPassword === req.body.verifyPassword) {
-        user.password = bcrypt.hashSync(req.body.newPassword, 10);
-        user.reset_password_token = undefined;
-        user.reset_password_expires = undefined;
-        user.save(function(err) {
-          if (err) {
-            return res.status(422).send({
-              message: err
-            });
-          } else {
+    if (req.body.newPassword === req.body.verifyPassword){
+      resetUser.password = req.body.newPassword;
+      resetUser.reset_password_token = undefined;
+      resetUser.reset_password_expires = undefined;
+      resetUser.save(function(err) {
+        if (err) {
+          return res.status(422).send({
+            success: false, message: 'Password reset failed.'
+          });
+        } else {
 
-            var message = {
-              from: 'ArcSavvy <bdor528@gmail.com>',
-              to: user.email,
-              subject: 'ArcSavvy Password Reset Confirmation',
-              text: 'Your password has been reset!'
-            };
+          var message = {
+            from: 'ArcSavvy <bdor528@gmail.com>',
+            to: resetUser.email,
+            subject: 'ArcSavvy Password Reset Confirmation',
+            text: 'Your password has been reset!'
+          };
 
-            mailgun.messages().send(message, function (err, body){
-              if (err){
-                console.log('Mailgun ERROR!')
-              }
-              console.log(body);
+          mailgun.messages().send(message, function (err, body){
+            if (err){
+              return res.status(422).send({
+                success: false, message: 'Error reseting your password.'
+              });
+            }
+            return res.status(200).send({
+              success: true, message: 'Password reset successful.'
             });
-          }
-        });
-      } else {
-        return res.status(422).send({
-          message: 'Passwords do not match'
-        });
-      }
-    } else {
-      return res.status(400).send({
-        message: 'Password reset token is invalid or has expired.'
+          });
+        }
       });
     }
   });

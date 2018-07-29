@@ -29,6 +29,14 @@ var UserSchema = new mongoose.Schema({
 	verify: {
 		type: String,
 		required: false
+	},
+	reset_password_token: {
+		type: String,
+		required: false
+	},
+	reset_password_expires: {
+		type: Date,
+		required: false
 	}
 }, {
 	timestamps: true // DB fields createdAt/updatedAt
