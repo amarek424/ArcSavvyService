@@ -6,7 +6,13 @@ var bcrypt = require('bcrypt');
 var mailgun = require('mailgun-js')({apiKey: config.mailgunapikey, domain: config.mailgundomain});
 const user = require('../models/user');
 
-// register new users
+
+// Creates a new user and sends verify email
+// POST Params:
+// body.email - the new users email address, must be unique
+// body.password - the new users account Password
+// body.firstname
+// body.lastname
 exports.registerUser = (req, res) => {
   if(!req.body.email || !req.body.password) {
     res.json({ success: false, message: 'Please enter an email and password to register.'});
@@ -34,7 +40,7 @@ exports.registerUser = (req, res) => {
         from: 'ArcSavvy <bdor528@gmail.com>',
         to: newUser.email,
         subject: 'Veryify your ArcSavvy account now',
-        text: 'Veryify your account here http://localhost:8080/api/auth/verify/' + newUser.verify
+        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
@@ -49,7 +55,10 @@ exports.registerUser = (req, res) => {
   }
 }
 
-// Authentication: auth user and get jwt token
+// Authenticates user and sends jwt token
+// POST Params:
+// body.email - email addres to logon with
+// body.password - password to hash and compare
 exports.authenticateUser = (req, res) => {
   user.findOne({
     email: req.body.email
@@ -76,13 +85,17 @@ exports.authenticateUser = (req, res) => {
 }
 
 // Verify user account by email URL
+// GET params
+// verify - the token from the register email
 exports.verifyUser = (req, res) => {
+  // find user and clear its unverified status
   user.findOneAndUpdate({
     verify: req.params.verify
   },
   {
-    $unset: {verify: null }, $set: {active: true}
+    $unset: {verify: null, active: null}
   }, function(err, user){
+    // if error or the user cannot be found, return error
     if (err || user == null){
         return res.json({ success: false, message: 'Invalid verification URL.'});
     }
@@ -92,9 +105,12 @@ exports.verifyUser = (req, res) => {
 
 
 // Reset user password
+// POST params
+// body.email - the email address of the account to reset.
 exports.forgotPassword = (req, res) => {
   async.waterfall([
     function(done) {
+      // Find the user info by email
       user.findOne({
         email: req.body.email
       }).exec(function(err, forgetfulUser) {
@@ -106,13 +122,14 @@ exports.forgotPassword = (req, res) => {
       });
     },
     function(forgetfulUser, done) {
-      // create the random token
+      // create the random token to send via email
       crypto.randomBytes(20, function(err, buffer) {
         var token = buffer.toString('hex');
         done(err, forgetfulUser, token);
       });
     },
     function(forgetfulUser, token, done) {
+      // update our user with the reset token and expire date
       user.findOneAndUpdate({ email: forgetfulUser.email },
         {
           $set: {
@@ -127,11 +144,13 @@ exports.forgotPassword = (req, res) => {
       });
     },
     function(token, forgetfulUser, done) {
+      // Send the link and code to the user via email
       var message = {
         from: 'ArcSavvy <bdor528@gmail.com>',
         to: forgetfulUser.email,
         subject: 'Reset your ArcSavvy account password now',
-        text: 'Reset your password here http://localhost:8080/api/auth/reset/' + token
+        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="http://localhost:8080/api/auth/reset/">Reset Password</a><br>'
+            + 'Enter this code: ' + token + '</p>'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
@@ -148,11 +167,16 @@ exports.forgotPassword = (req, res) => {
 
 
 exports.resetPassword = (req, res) => {
-  user.findOne({email: req.body.email, reset_password_token: req.body.token}).exec(function(err, resetUser) {
+  // find the user based on the email they enter and the token they have
+  user.findOne({email: req.body.email, reset_password_token: req.body.token, reset_password_expires: {
+      $gt: Date.now()
+    }}).exec(function(err, resetUser) {
     if(err || resetUser == null){
       res.json({ success: false, message: 'Token bad or expired!'})
     }
+    // check if the two passwords in the form match before continuing
     if (req.body.newPassword === req.body.verifyPassword){
+      // Set the new user attributes and save to db
       resetUser.password = req.body.newPassword;
       resetUser.reset_password_token = undefined;
       resetUser.reset_password_expires = undefined;
@@ -162,12 +186,12 @@ exports.resetPassword = (req, res) => {
             success: false, message: 'Password reset failed.'
           });
         } else {
-
+          // If everything is successful, send the email confirming the change
           var message = {
             from: 'ArcSavvy <bdor528@gmail.com>',
             to: resetUser.email,
             subject: 'ArcSavvy Password Reset Confirmation',
-            text: 'Your password has been reset!'
+            html: '<h2>Your password has been reset!</h2'
           };
 
           mailgun.messages().send(message, function (err, body){
