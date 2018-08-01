@@ -17,41 +17,45 @@ exports.registerUser = (req, res) => {
   if(!req.body.email || !req.body.password) {
     res.json({ success: false, message: 'Please enter an email and password to register.'});
   }else{
-    var newUser = new user({
-      email: req.body.email,
-      password: req.body.password,
-      firstName: req.body.firstname,
-      lastName: req.body.lastname
-    });
-
-    // Generate hash for email verification
-    var current_date = (new Date()).valueOf().toString();
-    var random = Math.random().toString();
-    newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
-
-    // try to save new user
-    newUser.save(function(err){
-      if (err) {
-        return res.json({success: false, message: 'Email address already exists.'});
-      }
-
-
-      var message = {
-        from: 'ArcSavvy <bdor528@gmail.com>',
-        to: newUser.email,
-        subject: 'Veryify your ArcSavvy account now',
-        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
-      };
-      mailgun.messages().send(message, function (err, body){
-        if (err){
-          console.log('Mailgun ERROR!')
-        }
-        console.log(body);
+    if(req.body.password != req.body.verifyPassword){
+      res.json({ success: false, message: 'Passwords do not match.'});
+    } else {
+      var newUser = new user({
+        email: req.body.email,
+        password: req.body.password,
+        firstName: req.body.firstname,
+        lastName: req.body.lastname
       });
 
+      // Generate hash for email verification
+      var current_date = (new Date()).valueOf().toString();
+      var random = Math.random().toString();
+      newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
 
-      res.json({ success: true, message: 'Successfully created new user.'});
-    });
+      // try to save new user
+      newUser.save(function(err){
+        if (err) {
+          return res.json({success: false, message: 'Email address already exists.'});
+        }
+
+
+        var message = {
+          from: 'ArcSavvy <bdor528@gmail.com>',
+          to: newUser.email,
+          subject: 'Veryify your ArcSavvy account now',
+          html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
+        };
+        mailgun.messages().send(message, function (err, body){
+          if (err){
+            console.log('Mailgun ERROR!')
+          }
+          console.log(body);
+        });
+
+
+        res.json({ success: true, message: 'Successfully created new user.'});
+      });
+    }
   }
 }
 
