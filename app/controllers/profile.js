@@ -13,13 +13,24 @@ exports.getUsers = (req, res, next) => {
 }
 
 // Returns the current user's account info
-exports.getUser = (req, res, next) => {
-	console.log('Getting current user info.')
+exports.getProfile = (req, res, next) => {
+	console.log('Getting current user info.');
 	user.findById(req.user.id, function (err, user){
 		if (err) {
 			return res.json({ success: false, message: 'Error: User ID not found'})
 		}
 		user.password = null;
 		res.json(user);
+	});
+}
+
+//returns a user by email address
+exports.getUser = (req, res, next) => {
+	console.log('Getting a user.');
+	user.find({email: req.params.email})
+	.select('-password')
+	.exec(function(err, result) {
+		if (err) throw err;
+		res.json(result);
 	});
 }
