@@ -1,5 +1,4 @@
 var jwt = require('jsonwebtoken');
-// var config = require('../config/main');
 var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
@@ -76,7 +75,7 @@ exports.authenticateUser = (req, res) => {
           delete userJson._id;
           delete userJson.__v;
           userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-          var token = jwt.sign(userJson, config.secret, {
+          var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 10000
           });
           res.json({ success: true, token: 'JWT ' + token});
