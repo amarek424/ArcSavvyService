@@ -17,45 +17,38 @@ exports.registerUser = (req, res) => {
   if(!req.body.email || !req.body.password) {
     res.json({ success: false, message: 'Please enter an email and password to register.'});
   }else{
-    if(req.body.password != req.body.verifyPassword){
-      res.json({ success: false, message: 'Passwords do not match.'});
-    } else {
-      var newUser = new user({
-        email: req.body.email,
-        password: req.body.password,
-        firstName: req.body.firstname,
-        lastName: req.body.lastname
-      });
+    var newUser = new user({
+      email: req.body.email,
+      password: req.body.password,
+      firstName: req.body.firstname,
+      lastName: req.body.lastname
+    });
 
-      // Generate hash for email verification
-      var current_date = (new Date()).valueOf().toString();
-      var random = Math.random().toString();
-      newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
+    // Generate hash for email verification
+    var current_date = (new Date()).valueOf().toString();
+    var random = Math.random().toString();
+    newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
 
     // try to save new user
     newUser.save(function(err){
-      if (err) {
-        return res.json({success: false, message: 'Email address unavailable.'});
-      }
-
-
-      var message = {
-        from: 'ArcSavvy <bdor528@gmail.com>',
-        to: newUser.email,
-        subject: 'ArcSavvy Account Verification',
-        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
-      };
-      mailgun.messages().send(message, function (err, body){
-        if (err){
-          console.log('Mailgun ERROR!')
-        }
-        console.log(body);
-      });
-
-
-        res.json({ success: true, message: 'Successfully created new user.'});
-      });
+    if (err) {
+      return res.json({success: false, message: 'Email address unavailable.'});
     }
+
+    var message = {
+      from: 'ArcSavvy <bdor528@gmail.com>',
+      to: newUser.email,
+      subject: 'ArcSavvy Account Verification',
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
+    };
+    mailgun.messages().send(message, function (err, body){
+      if (err){
+        console.log('Mailgun ERROR!')
+      }
+      console.log(body);
+    });
+      res.json({ success: true, message: 'Successfully created new user.'});
+    });
   }
 }
 
@@ -75,7 +68,15 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
         if (isMatch && !err){
           // Create the token
-          var token = jwt.sign(user.toJSON(), config.secret, {
+          user.password = null;
+          userJson = user.toJSON();
+          delete userJson.password;
+          delete userJson.createdAt;
+          delete userJson.updatedAt;
+          delete userJson._id;
+          delete userJson.__v;
+          userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          var token = jwt.sign(userJson, config.secret, {
             expiresIn: 10000
           });
           res.json({ success: true, token: 'JWT ' + token});
@@ -97,7 +98,7 @@ exports.verifyUser = (req, res) => {
     verify: req.params.verify
   },
   {
-    $unset: {verify: null, active: null}
+    $unset: {verify: null}
   }, function(err, user){
     // if error or the user cannot be found, return error
     if (err || user == null){
