@@ -23,8 +23,7 @@ module.exports = function(app) {
 	authRoutes.post('/reset', AuthController.resetPassword)
 
 	// Perform user/profile related stuff
-	// apiRoutes.use('/profile', passport.authenticate('jwt', {session: false}), profileRoutes);
-	apiRoutes.use('/profile', profileRoutes);
+	apiRoutes.use('/profile', passport.authenticate('jwt', {session: false}), profileRoutes);
 
 	profileRoutes.get('/', UserController.getProfile); // Make this a function that returns current user instead
 	profileRoutes.get('/users', UserController.getUsers);
