@@ -4,10 +4,10 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var passport = require('passport');
-var config = require('./app/config/main');
+// var config = require('./app/config/main');
 var user = require('./app/models/user');
 var jwt = require('jsonwebtoken');
-var databaseConfig = require('./app/config/main');
+// var databaseConfig = require('./app/config/main');
 var router = require('./app/routes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +24,7 @@ app.use(passport.initialize());
 //   next();
 // });
 
-mongoose.connect(databaseConfig.database,
+mongoose.connect(process.env.database,
 	{ useNewUrlParser: true })
 	.then(res => console.log("Connected to DB"))
 	.catch(err => console.log(err));

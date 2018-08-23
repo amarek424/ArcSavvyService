@@ -1,9 +1,9 @@
 var jwt = require('jsonwebtoken');
-var config = require('../config/main');
+// var config = require('../config/main');
 var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
-var mailgun = require('mailgun-js')({apiKey: config.mailgunapikey, domain: config.mailgundomain});
+var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
 const user = require('../models/user');
 
 
