@@ -18,7 +18,7 @@ module.exports = function(app) {
 	apiRoutes.use('/auth', authRoutes);
 	authRoutes.post('/register', AuthController.registerUser);
 	authRoutes.post('/authenticate', AuthController.authenticateUser);
-	authRoutes.get('/verify/:verify', AuthController.verifyUser);
+	authRoutes.post('/verify', AuthController.verifyUser);
 	authRoutes.post('/forgot', AuthController.forgotPassword);
 	authRoutes.post('/reset', AuthController.resetPassword)
 
