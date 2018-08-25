@@ -103,13 +103,13 @@ exports.verifyUser = (req, res) => {
   },
   {
     $inc: { 'verify.attempts': -1 }
-  }, function(err, user){
+  }, function(err, foundUser){
     // if error or the user cannot be found, return error
     if (err){
       return res.json({ success: false, message: 'Invalid verification code.'});
     }
-    console.log(user.verify.attempts);
-    if (user.verify.attempts > 0) {
+    console.log(foundUser.verify.attempts);
+    if (foundUser.verify.attempts > 0) {
       console.log('Enough attempts');
 
 
@@ -125,7 +125,7 @@ exports.verifyUser = (req, res) => {
       },
       {
         $set: { 'verify.attempts': 3, 'verify.code': 000000 }
-      }, function(err, user){
+      }, function(err, foundUser){
         // if error or the user cannot be found, return error
         if (err){
           return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
