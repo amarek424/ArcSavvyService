@@ -106,6 +106,7 @@ exports.verifyUser = (req, res) => {
   }, function(err, user){
     // if error or the user cannot be found, return error
     if (err || user == null){
+      console.log(err);
         return res.json({ success: false, message: 'Invalid verification URL.'});
     }
     res.json({ success: true, message: 'Account verified! ' + user.email});
