@@ -111,8 +111,26 @@ exports.verifyUser = (req, res) => {
     console.log(user.verify.attempts);
     if (user.verify.attempts > 0) {
       console.log('Enough attempts');
+
+
+
+
+
+
+
     } else {
       console.log('No attempts left');
+      user.findOneAndUpdate({
+        email: req.body.email
+      },
+      {
+        $set: { 'verify.attempts': 3, 'verify.code': 000000 }
+      }, function(err, user){
+        // if error or the user cannot be found, return error
+        if (err){
+          return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
+        }
+      });
     }
     return res.json({ success: false, message: 'Stuff'});
   });
