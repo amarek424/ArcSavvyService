@@ -28,7 +28,8 @@ var UserSchema = new mongoose.Schema({
 		},
 		attempts: {
 			type: Number,
-			required: false
+			required: false,
+			default: 3
 		}
 	},
 	reset_password_token: {
