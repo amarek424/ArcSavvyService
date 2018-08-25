@@ -28,6 +28,9 @@ exports.registerUser = (req, res) => {
     var random = Math.random().toString();
     newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
 
+    // replace this url key with a key that they will make the user validate immediately  123-123ß
+
+
     // try to save new user
     newUser.save(function(err){
     if (err) {
@@ -42,7 +45,7 @@ exports.registerUser = (req, res) => {
     };
     mailgun.messages().send(message, function (err, body){
       if (err){
-        console.log('Mailgun ERROR!')
+        console.log('Mailgun ERROR!');
       }
       console.log(body);
     });
