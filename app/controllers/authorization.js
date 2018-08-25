@@ -119,7 +119,7 @@ exports.verifyUser = (req, res) => {
         $unset: { 'verify.attempts': null, 'verify.code': null }
       }, function(err, foundUser){
         // if error or the user cannot be found, return error
-        if (err){
+        if (err || foundUser.verify.code != req.body.code){
           return res.json({ success: false, message: 'Invalid verification code.'});
         }
         return res.json({ success: true, message: 'Account verified successfully!'});
@@ -140,7 +140,6 @@ exports.verifyUser = (req, res) => {
         return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
       });
     }
-    return res.json({ success: false, message: 'Stuff'});
   });
 }
 
