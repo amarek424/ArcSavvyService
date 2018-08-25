@@ -112,11 +112,18 @@ exports.verifyUser = (req, res) => {
     if (foundUser.verify.attempts > 0) {
       console.log('Enough attempts');
 
-
-
-
-
-
+      user.findOneAndUpdate({
+        email: req.body.email
+      },
+      {
+        $unset: { 'verify.attempts': null, 'verify.code': null }
+      }, function(err, foundUser){
+        // if error or the user cannot be found, return error
+        if (err){
+          return res.json({ success: false, message: 'Invalid verification code.'});
+        }
+        return res.json({ success: true, message: 'Account verified successfully!'});
+      });
 
     } else {
       console.log('No attempts left');
