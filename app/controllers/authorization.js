@@ -109,7 +109,7 @@ exports.verifyUser = (req, res) => {
       return res.json({ success: false, message: 'Invalid verification code.'});
     }
     console.log(user.verify.attempts);
-    if (user.verify.attempts > 1) {
+    if (user.verify.attempts > 0) {
       console.log('Enough attempts');
     } else {
       console.log('No attempts left');
