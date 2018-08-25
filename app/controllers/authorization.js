@@ -104,7 +104,7 @@ exports.createNewValidateCode = (req, res) => {
   {
     $set: { 'verify.code': newCode, 'verify.attempts': 3 }
   }, function(err, foundUser){
-    if (err){
+    if (err || foundUser == null){
       return res.json({ success: false, message: 'Cannot create new code for that user.'});
     }
     var message = {
