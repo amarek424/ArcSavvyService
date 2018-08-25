@@ -130,7 +130,8 @@ exports.createNewValidateCode = (req, res) => {
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
   user.findOneAndUpdate({
-    email: req.body.email
+    email: req.body.email,
+    verify: { $exists: true }
   },
   {
     $inc: { 'verify.attempts': -1 }
