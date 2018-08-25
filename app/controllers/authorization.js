@@ -23,13 +23,14 @@ exports.registerUser = (req, res) => {
       lastName: req.body.lastname
     });
 
-    // Generate hash for email verification
-    var current_date = (new Date()).valueOf().toString();
-    var random = Math.random().toString();
-    newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
+    // OLD: Generate hash for email verification
+    // var current_date = (new Date()).valueOf().toString();
+    // var random = Math.random().toString();
+    // newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
+    console.log(Math.floor(100000 + Math.random() * 900000));
+    newUser.verify.code = Math.floor(100000 + Math.random() * 900000);
 
     // replace this url key with a key that they will make the user validate immediately  123-123ß
-
 
     // try to save new user
     newUser.save(function(err){
@@ -41,7 +42,7 @@ exports.registerUser = (req, res) => {
       from: 'ArcSavvy <bdor528@gmail.com>',
       to: newUser.email,
       subject: 'ArcSavvy Account Verification',
-      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="https://arcsavvyservice.herokuapp.com/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="https://arcsavvyservice.herokuapp.com/api/auth/verify/' + newUser.verify.code + '">Verify</a> my account'
     };
     mailgun.messages().send(message, function (err, body){
       if (err){
