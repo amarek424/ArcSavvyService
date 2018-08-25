@@ -114,7 +114,7 @@ exports.verifyUser = (req, res) => {
     } else {
       console.log('No attempts left');
     }
-
+    return res.json({ success: false, message: 'Stuff'});
   });
 }
 
