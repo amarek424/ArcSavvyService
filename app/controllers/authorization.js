@@ -135,7 +135,7 @@ exports.verifyUser = (req, res) => {
           email: req.body.email
         },
         {
-          $set: { 'verify.attempts': 3, 'verify.code': 000000 }
+          $set: { 'verify.code': 000000 }
         }, function(err, foundUser){
           // if error or the user cannot be found, return error
           if (err){
