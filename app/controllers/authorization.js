@@ -102,7 +102,7 @@ exports.verifyUser = (req, res) => {
     email: req.body.email
   },
   {
-    $dec: { verify.attempts: 1 }}
+    $dec: { verify: {attempts: 1 }}
   }, function(err, user){
     // if error or the user cannot be found, return error
     if (err || user == null){
