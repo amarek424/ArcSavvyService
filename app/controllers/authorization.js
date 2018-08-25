@@ -137,7 +137,7 @@ exports.verifyUser = (req, res) => {
     $inc: { 'verify.attempts': -1 }
   }, function(err, foundUser){
     // if error or the user cannot be found, return error
-    if (err){
+    if (err || foundUser == null){
       return res.json({ success: false, message: 'Invalid verification code.'});
     }
     if (foundUser.code != 0) {
@@ -150,7 +150,7 @@ exports.verifyUser = (req, res) => {
             $unset: { verify: null }
           }, function(err, foundUser){
             // if error or the user cannot be found, return error
-            if (err){
+            if (err || foundUser == null){
               return res.json({ success: false, message: 'Invalid verification code.'});
             }
             return res.json({ success: true, message: 'Account verified successfully!'});
@@ -167,7 +167,7 @@ exports.verifyUser = (req, res) => {
           $set: { 'verify.code': 000000 }
         }, function(err, foundUser){
           // if error or the user cannot be found, return error
-          if (err){
+          if (err || foundUser == null){
             return res.json({ success: false, message: 'Invalid verification code.'});
           }
           return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
