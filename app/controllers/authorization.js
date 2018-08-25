@@ -42,7 +42,7 @@ exports.registerUser = (req, res) => {
       from: 'ArcSavvy <bdor528@gmail.com>',
       to: newUser.email,
       subject: 'ArcSavvy Account Verification',
-      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="https://arcsavvyservice.herokuapp.com/api/auth/verify/' + newUser.verify.code + '">Verify</a> my account'
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
     };
     mailgun.messages().send(message, function (err, body){
       if (err){
@@ -101,7 +101,7 @@ exports.verifyUser = (req, res) => {
     email: req.body.email
   },
   {
-    $unset: $dec: { verify: 1 }
+    $dec: { verify: 1 }
   }, function(err, user){
     // if error or the user cannot be found, return error
     if (err || user == null){
