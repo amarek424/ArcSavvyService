@@ -110,33 +110,9 @@ exports.verifyUser = (req, res) => {
     }
     console.log(user.verify.attempts);
     if (user.verify.attempts > 1) {
-      if (req.body.code == user.verify.code) {
-        user.findOneAndUpdate({
-          email: req.body.email
-        },
-        {
-          $set: { 'verify.attempts': 3, 'verify.code': 000000 }
-        }, function(err, user){
-          if (err){
-            return res.json({ success: false, message: 'Invalid verification code.'});
-          }
-        });
-        return res.json({ success: true, message: 'Account verified! ' + user.email});
-      } else {
-        return res.json({ success: false, message: 'Invalid verification code.'});
-      }
+      console.log('Enough attempts');
     } else {
-      user.findOneAndUpdate({
-        email: req.body.email
-      },
-      {
-        $unset: { verify: null }
-      }, function(err, user){
-        if (err){
-          return res.json({ success: false, message: 'Invalid verification code.'});
-        }
-        return res.json({ success: false, message: 'Validation attempts exceeded. Create new code.'});
-      });
+      console.log('No attempts left');
     }
 
   });
