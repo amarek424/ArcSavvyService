@@ -97,7 +97,6 @@ exports.authenticateUser = (req, res) => {
 // verify - the token from the register email
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
-  console.log(req.body.email);
   user.findOneAndUpdate({
     email: req.body.email
   },
@@ -109,9 +108,7 @@ exports.verifyUser = (req, res) => {
       return res.json({ success: false, message: 'Invalid verification code.'});
     }
     if (foundUser.code != 0) {
-      console.log(foundUser.verify.attempts);
       if (foundUser.verify.attempts > 0) {
-        console.log('Enough attempts');
         if (foundUser.verify.code == req.body.code) {
           user.findOneAndUpdate({
             email: req.body.email
@@ -130,7 +127,6 @@ exports.verifyUser = (req, res) => {
         }
 
       } else {
-        console.log('No attempts left');
         user.findOneAndUpdate({
           email: req.body.email
         },
