@@ -27,7 +27,6 @@ exports.registerUser = (req, res) => {
     // var current_date = (new Date()).valueOf().toString();
     // var random = Math.random().toString();
     // newUser.verify = crypto.createHash('sha1').update(current_date + random).digest('hex');
-    console.log(Math.floor(100000 + Math.random() * 900000));
     newUser.verify.code = Math.floor(100000 + Math.random() * 900000);
 
     // replace this url key with a key that they will make the user validate immediately  123-123ß
@@ -92,9 +91,41 @@ exports.authenticateUser = (req, res) => {
   });
 }
 
-// Verify user account by email URL
-// GET params
-// verify - the token from the register email
+// Create a new validation code
+// POST params
+// code - the code from the register email
+// email - the email of the account to verify
+exports.createNewValidateCode = (req, res) => {
+  newCode = Math.floor(100000 + Math.random() * 900000);
+  user.findOneAndUpdate({
+    email: req.body.email,
+    verify: { $exists: true }
+  },
+  {
+    $set: { 'verify.code': newCode, 'verify.attempts': 3 }
+  }, function(err, foundUser){
+    if (err){
+      return res.json({ success: false, message: 'Cannot create new code for that user.'});
+    }
+    var message = {
+      from: 'ArcSavvy <bdor528@gmail.com>',
+      to: newUser.email,
+      subject: 'ArcSavvy Account Verification',
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newCode + '</label>'
+    };
+    mailgun.messages().send(message, function (err, body){
+      if (err){
+        console.log('Mailgun ERROR!');
+      }
+      return res.json({ success: true, message: 'New validation code created. Check your inbox.'});
+
+    });
+  });
+
+// Verify user account by email code
+// POST params
+// code - the code from the register email
+// email - the email of the account to verify
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
   user.findOneAndUpdate({
