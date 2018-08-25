@@ -97,6 +97,7 @@ exports.authenticateUser = (req, res) => {
 // verify - the token from the register email
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
+  console.log(req.body.email);
   user.findOneAndUpdate({
     email: req.body.email
   },
