@@ -98,13 +98,14 @@ exports.authenticateUser = (req, res) => {
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
   user.findOneAndUpdate({
-    verify: req.params.verify
+    verify.code: req.params.verify
   },
   {
-    $unset: {verify: null}
+    $unset: {verify: null}, {$dec: { verify: 1 }}
   }, function(err, user){
     // if error or the user cannot be found, return error
     if (err || user == null){
+
         return res.json({ success: false, message: 'Invalid verification URL.'});
     }
     res.json({ success: true, message: 'Account verified! ' + user.email});
