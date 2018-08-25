@@ -41,7 +41,7 @@ exports.registerUser = (req, res) => {
       from: 'ArcSavvy <bdor528@gmail.com>',
       to: newUser.email,
       subject: 'ArcSavvy Account Verification',
-      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="http://localhost:8080/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.<br><a href="https://arcsavvyservice.herokuapp.com/api/auth/verify/' + newUser.verify + '">Verify</a> my account'
     };
     mailgun.messages().send(message, function (err, body){
       if (err){
@@ -156,7 +156,7 @@ exports.forgotPassword = (req, res) => {
         from: 'ArcSavvy <bdor528@gmail.com>',
         to: forgetfulUser.email,
         subject: 'Reset your ArcSavvy account password now',
-        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="http://localhost:8080/api/auth/reset/">Reset Password</a><br>'
+        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="https://arcsavvyservice.herokuapp.com/api/auth/reset/">Reset Password</a><br>'
             + 'Enter this code: ' + token + '</p>'
       };
       mailgun.messages().send(message, function (err, body){
