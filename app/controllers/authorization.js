@@ -128,8 +128,9 @@ exports.verifyUser = (req, res) => {
       }, function(err, foundUser){
         // if error or the user cannot be found, return error
         if (err){
-          return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
+          return res.json({ success: false, message: 'Invalid verification code.'});
         }
+        return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
       });
     }
     return res.json({ success: false, message: 'Stuff'});
