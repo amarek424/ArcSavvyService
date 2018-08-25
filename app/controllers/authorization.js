@@ -105,11 +105,16 @@ exports.verifyUser = (req, res) => {
     $inc: { 'verify.attempts': -1 }
   }, function(err, user){
     // if error or the user cannot be found, return error
-    if (err || user == null){
-      console.log(err);
-        return res.json({ success: false, message: 'Invalid verification URL.'});
+    if (err){
+      return res.json({ success: false, message: 'Invalid verification code.'});
     }
-    res.json({ success: true, message: 'Account verified! ' + user.email});
+    console.log(user.verify.attempts);
+    if (req.body.code == user.verify.code) {
+      return res.json({ success: true, message: 'Account verified! ' + user.email});
+    } else {
+      return res.json({ success: false, message: 'Invalid verification code.'});
+    }
+
   });
 }
 
