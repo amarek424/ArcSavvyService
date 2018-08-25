@@ -21,14 +21,15 @@ var UserSchema = new mongoose.Schema({
 		enum: ['user'],
 		default: 'user'
 	},
-	active: {
-		type: Boolean,
-		required: true,
-		default: false
-	},
 	verify: {
-		type: String,
-		required: false
+		code: {
+			type: String,
+			required: false
+		},
+		attempts: {
+			type: Number,
+			required: false
+		}
 	},
 	reset_password_token: {
 		type: String,
