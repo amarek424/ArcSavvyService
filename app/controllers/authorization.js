@@ -108,40 +108,44 @@ exports.verifyUser = (req, res) => {
     if (err){
       return res.json({ success: false, message: 'Invalid verification code.'});
     }
-    console.log(foundUser.verify.attempts);
-    if (foundUser.verify.attempts > 0) {
-      console.log('Enough attempts');
-      if (foundUser.verify.code == req.body.code) {
+    if (foundUser.code != 0) {
+      console.log(foundUser.verify.attempts);
+      if (foundUser.verify.attempts > 0) {
+        console.log('Enough attempts');
+        if (foundUser.verify.code == req.body.code) {
+          user.findOneAndUpdate({
+            email: req.body.email
+          },
+          {
+            $unset: { verify: null }
+          }, function(err, foundUser){
+            // if error or the user cannot be found, return error
+            if (err){
+              return res.json({ success: false, message: 'Invalid verification code.'});
+            }
+            return res.json({ success: true, message: 'Account verified successfully!'});
+          });
+        } else {
+          return res.json({ success: false, message: 'Invalid verification code.'});
+        }
+
+      } else {
+        console.log('No attempts left');
         user.findOneAndUpdate({
           email: req.body.email
         },
         {
-          $unset: { verify: null }
+          $set: { 'verify.attempts': 3, 'verify.code': 000000 }
         }, function(err, foundUser){
           // if error or the user cannot be found, return error
           if (err){
             return res.json({ success: false, message: 'Invalid verification code.'});
           }
-          return res.json({ success: true, message: 'Account verified successfully!'});
+          return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
         });
-      } else {
-        return res.json({ success: false, message: 'Invalid verification code.'});
       }
-
     } else {
-      console.log('No attempts left');
-      user.findOneAndUpdate({
-        email: req.body.email
-      },
-      {
-        $set: { 'verify.attempts': 3, 'verify.code': 000000 }
-      }, function(err, foundUser){
-        // if error or the user cannot be found, return error
-        if (err){
-          return res.json({ success: false, message: 'Invalid verification code.'});
-        }
-        return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
-      });
+      return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
     }
   });
 }
