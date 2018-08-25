@@ -121,6 +121,7 @@ exports.createNewValidateCode = (req, res) => {
 
     });
   });
+}
 
 // Verify user account by email code
 // POST params
