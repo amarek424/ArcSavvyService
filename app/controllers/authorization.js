@@ -115,12 +115,12 @@ exports.verifyUser = (req, res) => {
           email: req.body.email
         },
         {
-          $unset: { verify: null }
+          $set: { 'verify.attempts': 3, 'verify.code': 000000 }
         }, function(err, user){
           if (err){
             return res.json({ success: false, message: 'Invalid verification code.'});
           }
-        }
+        });
         return res.json({ success: true, message: 'Account verified! ' + user.email});
       } else {
         return res.json({ success: false, message: 'Invalid verification code.'});
@@ -136,7 +136,7 @@ exports.verifyUser = (req, res) => {
           return res.json({ success: false, message: 'Invalid verification code.'});
         }
         return res.json({ success: false, message: 'Validation attempts exceeded. Create new code.'});
-      }
+      });
     }
 
   });
