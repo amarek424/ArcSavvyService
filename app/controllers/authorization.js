@@ -111,7 +111,7 @@ exports.verifyUser = (req, res) => {
     console.log(foundUser.verify.attempts);
     if (foundUser.verify.attempts > 0) {
       console.log('Enough attempts');
-      if (foundUser.verify.code == req.body.code)
+      if (foundUser.verify.code == req.body.code) {
         user.findOneAndUpdate({
           email: req.body.email
         },
