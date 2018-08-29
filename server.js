@@ -6,6 +6,7 @@ app.all('*', function(req, res, next) {
      console.log(origin);
      res.header('Access-Control-Allow-Origin', origin);
      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+     res.header("Access-Control-Allow-Headers", "Accept");
      res.header('Access-Control-Allow-Headers', 'Content-Type');
      res.header('Access-Control-Allow-Headers', 'authorization');
      res.header('Access-Control-Allow-Methods', 'POST');
