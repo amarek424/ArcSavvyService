@@ -10,14 +10,6 @@ var jwt = require('jsonwebtoken');
 // var databaseConfig = require('./app/config/main');
 var router = require('./app/routes');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.use(morgan('dev'));
-
-// initialize passport
-app.use(passport.initialize());
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -25,6 +17,14 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(morgan('dev'));
+
+// initialize passport
+app.use(passport.initialize());
 
 mongoose.connect(process.env.database,
 	{ useNewUrlParser: true })
