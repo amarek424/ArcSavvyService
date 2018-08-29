@@ -11,6 +11,7 @@ module.exports = function(passport){
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
     console.log(jwt_payload._id);
+    console.log('hERE');
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         console.log(err);
@@ -20,7 +21,6 @@ module.exports = function(passport){
         console.log(user);
         done(null, user);
       } else {
-        console.log('NONE');
         done(null, false);
       }
     });
