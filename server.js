@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+
 app.all('*', function(req, res, next) {
      var origin = req.get('origin');
      res.header('Access-Control-Allow-Origin', origin);
@@ -11,6 +12,7 @@ app.all('*', function(req, res, next) {
      res.header('Access-Control-Allow-Methods', 'OPTIONS');
      next();
 });
+
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
