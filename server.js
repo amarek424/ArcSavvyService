@@ -3,10 +3,11 @@ var app = express();
 
 app.all('*', function(req, res, next) {
      var origin = req.get('origin');
+     console.log(origin);
      res.header('Access-Control-Allow-Origin', origin);
      res.header("Access-Control-Allow-Headers", "X-Requested-With");
      res.header('Access-Control-Allow-Headers', 'Content-Type');
-     res.header('Access-Control-Allow-Headers', 'Authorization');
+     res.header('Access-Control-Allow-Headers', 'authorization');
      res.header('Access-Control-Allow-Methods', 'POST');
      res.header('Access-Control-Allow-Methods', 'GET');
      res.header('Access-Control-Allow-Methods', 'OPTIONS');
