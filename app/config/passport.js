@@ -13,12 +13,14 @@ module.exports = function(passport){
     console.log('HERE');
     User.findById(jwt_payload._id, function(err, user){
       if (err){
+        console.log(err);
         return done(err, false);
       }
       if (user){
         console.log(user);
         done(null, user);
       } else {
+        console.log('NONE');
         done(null, false);
       }
     });
