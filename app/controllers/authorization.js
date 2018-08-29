@@ -72,7 +72,7 @@ exports.authenticateUser = (req, res) => {
           // Create the token
           // user.password = null;
           userJson = user.toJSON();
-          userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+          // userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 10000
           });
