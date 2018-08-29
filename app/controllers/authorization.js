@@ -70,13 +70,8 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
         if (isMatch && !err){
           // Create the token
-          user.password = null;
+          // user.password = null;
           userJson = user.toJSON();
-          delete userJson.password;
-          delete userJson.createdAt;
-          delete userJson.updatedAt;
-          delete userJson._id;
-          delete userJson.__v;
           userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 10000
