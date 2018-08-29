@@ -1,12 +1,12 @@
 var express = require('express');
 var app = express();
-app.all('*', function(req, res, next) {
-     var origin = req.get('origin');
-     res.header('Access-Control-Allow-Origin', origin);
-     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-     res.header('Access-Control-Allow-Headers', 'Content-Type');
-     next();
-});
+// app.all('*', function(req, res, next) {
+//      var origin = req.get('origin');
+//      res.header('Access-Control-Allow-Origin', origin);
+//      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//      res.header('Access-Control-Allow-Headers', 'Content-Type');
+//      next();
+// });
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
