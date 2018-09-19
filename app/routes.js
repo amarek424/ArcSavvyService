@@ -22,6 +22,7 @@ module.exports = function(app) {
 	authRoutes.post('/forgot', AuthController.forgotPassword);
 	authRoutes.post('/reset', AuthController.resetPassword);
 	authRoutes.post('/newcode', AuthController.createNewValidateCode);
+	authRouts.post('/emailexists', AuthController.checkEmailExists);
 
 	// Perform user/profile related stuff
 	apiRoutes.use('/profile', passport.authenticate('jwt', {session: false}), profileRoutes);

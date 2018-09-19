@@ -280,3 +280,17 @@ exports.resetPassword = (req, res) => {
     }
   });
 };
+
+// check if the given email address is available
+exports.checkEmailExists = (req, res) => {
+  user.findOne({email: req.body.email}).exec(function(err, foundAccount) {
+    if (err){
+      res.json({ success: true, message: 'Error: please try again'});
+    }
+    if (foundAccount == null) {
+      res.json({ success: true, message: 'Email available'});
+    }
+    res.json({ success: false, message: 'Email already exists'});
+  })
+}
+
