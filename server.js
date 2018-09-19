@@ -1,19 +1,22 @@
 var express = require('express');
 var app = express();
+var cors = require('cors')
 
-app.all('*', function(req, res, next) {
-     var origin = req.get('origin');
-     console.log(origin);
-     res.header('Access-Control-Allow-Origin', origin);
-     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-     res.header("Access-Control-Allow-Headers", "Accept");
-     res.header('Access-Control-Allow-Headers', 'Content-Type');
-     res.header('Access-Control-Allow-Headers', 'authorization');
-     res.header('Access-Control-Allow-Methods', 'POST');
-     res.header('Access-Control-Allow-Methods', 'GET');
-     res.header('Access-Control-Allow-Methods', 'OPTIONS');
-     next();
-});
+app.use(cors());
+
+// app.all('*', function(req, res, next) {
+//      var origin = req.get('origin');
+//      console.log(origin);
+//      res.header('Access-Control-Allow-Origin', origin);
+//      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//      res.header("Access-Control-Allow-Headers", "Accept");
+//      res.header('Access-Control-Allow-Headers', 'Content-Type');
+//      res.header('Access-Control-Allow-Headers', 'authorization');
+//      res.header('Access-Control-Allow-Methods', 'POST');
+//      res.header('Access-Control-Allow-Methods', 'GET');
+//      res.header('Access-Control-Allow-Methods', 'OPTIONS');
+//      next();
+// });
 
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
