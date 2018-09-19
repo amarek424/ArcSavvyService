@@ -289,8 +289,9 @@ exports.checkEmailExists = (req, res) => {
     }
     if (foundAccount == null) {
       res.json({ success: true, message: 'Email available'});
+    } else {
+      res.json({ success: false, message: 'Email already exists'});
     }
-    res.json({ success: false, message: 'Email already exists'});
   })
 }
 
