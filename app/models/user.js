@@ -21,6 +21,11 @@ var UserSchema = new mongoose.Schema({
 		enum: ['user'],
 		default: 'user'
 	},
+	loggedIn: {
+		type: Boolean,
+		required: true,
+		default: false
+	},
 	verify: {
 		code: {
 			type: String,

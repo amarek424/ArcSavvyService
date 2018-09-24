@@ -281,6 +281,8 @@ exports.resetPassword = (req, res) => {
   });
 };
 
+
+
 // check if the given email address is available
 exports.checkEmailExists = (req, res) => {
   user.findOne({email: req.body.email}).exec(function(err, foundAccount) {
@@ -293,5 +295,24 @@ exports.checkEmailExists = (req, res) => {
       res.json({ success: false, message: 'Email already exists'});
     }
   })
+}
+
+
+// log the user out. 
+// WARNING! JWT tokens are STILL ACTIVE even when a user logs out.
+// This function marks the User as logged out in the DB, which is checked by PassPort before token is accepted.
+exports.logoutUser = (req, res) => {
+  user.findOneAndUpdate({
+    _id: req.user._id
+  },
+  {
+    $set: { 'loggedIn': false }
+  }, function(err, foundUser){
+    // if error or the user cannot be found, return error
+    if (err || foundUser == null){
+      return res.json({ success: false, message: 'Logout failed!'});
+    }
+    return res.json({ success: true, message: 'Bye.'});
+  });
 }
 

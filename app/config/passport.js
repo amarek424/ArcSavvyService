@@ -10,16 +10,17 @@ module.exports = function(passport){
   opts.secretOrKey = process.env.secret;
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-    console.log(jwt_payload._id);
-    console.log('hERE');
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         console.log(err);
         return done(err, false);
       }
       if (user){
-        console.log(user);
-        done(null, user);
+        if (user.loggedIn) {
+          done(null, user);
+        } else {
+          done(null, false);
+        }
       } else {
         done(null, false);
       }
