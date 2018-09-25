@@ -19,6 +19,7 @@ module.exports = function(passport){
         if (user.loggedIn) {
           done(null, user);
         } else {
+          console.log('Not logged in');
           done(null, false);
         }
       } else {
