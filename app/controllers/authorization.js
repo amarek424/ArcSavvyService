@@ -70,9 +70,10 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
         if (isMatch && !err){
           // Create the token
-          // user.password = null;
+          user.password = null;
+          user.verify = null;
+          user.loggedIn = null;
           userJson = user.toJSON();
-          // userJson['ipAddress'] = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 10000
           });
