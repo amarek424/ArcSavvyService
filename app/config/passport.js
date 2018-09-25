@@ -19,7 +19,7 @@ module.exports = function(passport){
         if (user.loggedIn) {
           user.loggedIn = null;
           user.verify = null;
-          user.password = false;
+          user.password = null;
           done(null, user);
         } else {
           console.log('Not logged in');
