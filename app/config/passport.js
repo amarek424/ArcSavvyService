@@ -9,11 +9,11 @@ module.exports = function(passport){
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = process.env.secret;
   
+  console.log(opts.jwtFromRequest);
+
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-    console.log(jwt_payload);
     User.findById(jwt_payload._id, function(err, user){
       if (err){
-        console.log(err);
         return done(err, false);
       }
       if (user){
