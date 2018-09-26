@@ -9,7 +9,6 @@ module.exports = function(passport){
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = process.env.secret;
   
-  console.log(opts.jwtFromRequest);
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
     User.findById(jwt_payload._id, function(err, user){
@@ -24,6 +23,8 @@ module.exports = function(passport){
           done(null, user);
         } else {
           console.log('Not logged in');
+          console.log(opts.jwtFromRequest);
+
           done(null, false);
         }
       } else {
