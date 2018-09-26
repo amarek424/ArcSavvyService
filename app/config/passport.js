@@ -7,6 +7,7 @@ module.exports = function(passport){
 
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
+  console.log(ExtractJwt.fromAuthHeaderWithScheme("jwt"));
   opts.secretOrKey = process.env.secret;
   
 
