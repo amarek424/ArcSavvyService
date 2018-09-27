@@ -54,7 +54,7 @@ exports.registerUser = (req, res) => {
     console.log("Email Should be sent. Mailgun fix.");
     console.log(body);
     res.json({ success: true, message: 'Successfully created new user.'});
-    };
+    });
   }
 }
 
