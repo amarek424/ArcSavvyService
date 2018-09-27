@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
-var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
+// var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
 const user = require('../models/user');
 
 
@@ -43,14 +43,17 @@ exports.registerUser = (req, res) => {
       subject: 'ArcSavvy Account Verification',
       html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
     };
-    mailgun.messages().send(message, function (err, body){
-      if (err){
-        console.log('Mailgun ERROR!');
-      }
-      console.log(body);
-    });
-      res.json({ success: true, message: 'Successfully created new user.'});
-    });
+    // mailgun.messages().send(message, function (err, body){
+    //   if (err){
+    //     console.log('Mailgun ERROR!');
+    //   }
+    //   console.log(body);
+    // });
+    //   res.json({ success: true, message: 'Successfully created new user.'});
+    // });
+    console.log("Email Should be sent. Mailgun fix.");
+    console.log(body);
+    res.json({ success: true, message: 'Successfully created new user.'});
   }
 }
 
