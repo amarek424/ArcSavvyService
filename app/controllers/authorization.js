@@ -292,6 +292,7 @@ exports.resetPassword = (req, res) => {
 exports.checkEmailExists = (req, res) => {
   user.findOne({email: req.body.email}).exec(function(err, foundAccount) {
     if (err){
+      console.log(err);
       res.json({ success: true, message: 'Error: please try again'});
     }
     if (foundAccount == null) {
