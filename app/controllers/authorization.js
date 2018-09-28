@@ -52,7 +52,7 @@ exports.registerUser = (req, res) => {
     //   res.json({ success: true, message: 'Successfully created new user.'});
     // });
     console.log("Email Should be sent. Mailgun fix.");
-    console.log(body);
+    console.log(message);
     res.json({ success: true, message: 'Successfully created new user.'});
     });
   }
@@ -295,8 +295,12 @@ exports.checkEmailExists = (req, res) => {
       console.log(err);
       res.json({ success: true, message: 'Error: please try again'});
     }
+
+
+
     if (foundAccount == null) {
       console.log("'" + req.body.email + "'");
+
       res.json({ success: true, message: 'Email available'});
     } else {
       res.json({ success: false, message: 'Email already exists'});
