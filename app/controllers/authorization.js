@@ -33,27 +33,27 @@ exports.registerUser = (req, res) => {
 
     // try to save new user
     newUser.save(function(err){
-    if (err) {
-      return res.json({success: false, message: 'Email address unavailable.'});
-    }
+      if (err) {
+        return res.json({success: false, message: 'Email address unavailable.'});
+      }
 
-    var message = {
-      from: 'ArcSavvy <bdor528@gmail.com>',
-      to: newUser.email,
-      subject: 'ArcSavvy Account Verification',
-      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
-    };
-    // mailgun.messages().send(message, function (err, body){
-    //   if (err){
-    //     console.log('Mailgun ERROR!');
-    //   }
-    //   console.log(body);
-    // });
+      var message = {
+        from: 'ArcSavvy <bdor528@gmail.com>',
+        to: newUser.email,
+        subject: 'ArcSavvy Account Verification',
+        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
+      };
+      mailgun.messages().send(message, function (err, body){
+        if (err){
+          console.log('Mailgun ERROR!');
+        }
+        console.log(body);
+      });
     //   res.json({ success: true, message: 'Successfully created new user.'});
     // });
-    console.log("Email Should be sent. Mailgun fix.");
-    console.log(message);
-    res.json({ success: true, message: 'Successfully created new user.'});
+    // console.log("Email Should be sent. Mailgun fix.");
+    // console.log(message);
+      res.json({ success: true, message: 'Successfully created new user.'});
     });
   }
 }
