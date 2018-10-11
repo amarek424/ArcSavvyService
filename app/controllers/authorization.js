@@ -46,6 +46,7 @@ exports.registerUser = (req, res) => {
       mailgun.messages().send(message, function (err, body){
         if (err){
           console.log('Mailgun ERROR!');
+          console.log(err);
         }
         console.log(body);
       });

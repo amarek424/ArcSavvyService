@@ -4,20 +4,6 @@ var cors = require('cors')
 
 app.use(cors());
 
-// app.all('*', function(req, res, next) {
-//      var origin = req.get('origin');
-//      console.log(origin);
-//      res.header('Access-Control-Allow-Origin', origin);
-//      res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//      res.header("Access-Control-Allow-Headers", "Accept");
-//      res.header('Access-Control-Allow-Headers', 'Content-Type');
-//      res.header('Access-Control-Allow-Headers', 'authorization');
-//      res.header('Access-Control-Allow-Methods', 'POST');
-//      res.header('Access-Control-Allow-Methods', 'GET');
-//      res.header('Access-Control-Allow-Methods', 'OPTIONS');
-//      next();
-// });
-
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
@@ -27,14 +13,6 @@ var user = require('./app/models/user');
 var jwt = require('jsonwebtoken');
 // var databaseConfig = require('./app/config/main');
 var router = require('./app/routes');
-
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
