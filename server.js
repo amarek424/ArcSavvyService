@@ -8,10 +8,8 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var passport = require('passport');
-// var config = require('./app/config/main');
 var user = require('./app/models/user');
 var jwt = require('jsonwebtoken');
-// var databaseConfig = require('./app/config/main');
 var router = require('./app/routes');
 
 app.use(bodyParser.urlencoded({ extended: false }));

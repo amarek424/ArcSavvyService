@@ -38,7 +38,7 @@ exports.registerUser = (req, res) => {
       }
 
       var message = {
-        from: 'ArcSavvy <bdor528@gmail.com>',
+        from: 'ArcSavvy <amarek424@gmail.com>',
         to: newUser.email,
         subject: 'ArcSavvy Account Verification',
         html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
