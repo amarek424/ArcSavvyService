@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
-// var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
+var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
 const user = require('../models/user');
 
 
