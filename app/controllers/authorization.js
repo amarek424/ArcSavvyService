@@ -41,7 +41,7 @@ exports.registerUser = (req, res) => {
         from: 'ArcSavvy <amarek424@gmail.com>',
         to: newUser.email,
         subject: 'ArcSavvy Account Verification',
-        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newUser.verify.code + '</label>'
+        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to <a href="http://localhost:4200/verify/bdor528@gmail.com">verify</a> your email address.</p><label>' + newUser.verify.code + '</label>'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
