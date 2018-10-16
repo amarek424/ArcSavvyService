@@ -17,17 +17,14 @@ module.exports = function(passport){
         return done(err, false);
       }
       if (user){
-        if (user.loggedIn) {
-          user.loggedIn = null;
-          user.verify = null;
-          user.password = null;
+        // if (user.loggedIn) {
+          // user.loggedIn = null;
+          // user.verify = null;
+          // user.password = null;
           done(null, user);
-        } else {
-          console.log('Not logged in');
-          console.log(opts.jwtFromRequest);
-
-          done(null, false);
-        }
+        // } else {
+        //   done(null, false);
+        // }
       } else {
         done(null, false);
       }
