@@ -94,7 +94,7 @@ exports.authenticateUser = (req, res) => {
 
 // Create a new validation code
 // POST params
-// code - the code from the register email
+
 // email - the email of the account to verify
 exports.createNewValidateCode = (req, res) => {
   newCode = Math.floor(100000 + Math.random() * 900000);
@@ -171,11 +171,11 @@ exports.verifyUser = (req, res) => {
           if (err || foundUser == null){
             return res.json({ success: false, message: 'Invalid verification code.'});
           }
-          return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
+          return res.json({ success: false, newcode: true, message: 'Validation attempts exceeded. Create a new code.'});
         });
       }
     } else {
-      return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.'});
+      return res.json({ success: false, newcode: true, message: 'Validation attempts exceeded. Create a new code.'});
     }
   });
 }
@@ -242,7 +242,7 @@ exports.forgotPassword = (req, res) => {
   });
 };
 
-
+// resets the users password
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
   user.findOne({email: req.body.email, reset_password_token: req.body.token, reset_password_expires: {
