@@ -80,7 +80,7 @@ exports.authenticateUser = (req, res) => {
           user.loggedIn = null;
           userJson = user.toJSON();
           var token = jwt.sign(userJson, process.env.secret, {
-            expiresIn: 30
+            expiresIn: 3600
           });
           res.json({ success: true, token: 'JWT ' + token});
         } else {
