@@ -139,7 +139,7 @@ exports.verifyUser = (req, res) => {
   }, function(err, foundUser){
     // if error or the user cannot be found, return error
     if (err || foundUser == null){
-      return res.json({ success: false, message: 'Invalid verification code.'});
+      return res.json({ success: false, message: 'Invalid verification code.1'});
     }
     if (foundUser.code != 0) {
       if (foundUser.verify.attempts > 0) {
@@ -152,12 +152,12 @@ exports.verifyUser = (req, res) => {
           }, function(err, foundUser){
             // if error or the user cannot be found, return error
             if (err || foundUser == null){
-              return res.json({ success: false, message: 'Invalid verification code.'});
+              return res.json({ success: false, message: 'Invalid verification code.2'});
             }
             return res.json({ success: true, message: 'Account verified successfully!'});
           });
         } else {
-          return res.json({ success: false, message: 'Invalid verification code.'});
+          return res.json({ success: false, message: 'Invalid verification code.3'});
         }
 
       } else {
@@ -169,7 +169,7 @@ exports.verifyUser = (req, res) => {
         }, function(err, foundUser){
           // if error or the user cannot be found, return error
           if (err || foundUser == null){
-            return res.json({ success: false, message: 'Invalid verification code.'});
+            return res.json({ success: false, message: 'Verification failed. User not found'});
           }
           return res.json({ success: false, newcode: true, message: 'Validation attempts exceeded. Create a new code.'});
         });
