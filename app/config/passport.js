@@ -13,7 +13,7 @@ module.exports = function(passport){
   passport.use(new JwtStrategy(opts, function(req, jwt_payload, done)
   
   {
-    console.log("REQ " + req);
+    console.log("REQ " + req.headers.authorization);
 
     User.findById(jwt_payload._id, function(err, user){
       if (err){
