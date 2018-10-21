@@ -74,10 +74,6 @@ exports.authenticateUser = (req, res) => {
       // CHeck the password, user just passed
       user.comparePassword(req.body.password, function(err, isMatch){
 
-        console.log("EMAIL: " + user.email);
-        console.log("BL: " + user.tokenBlacklist);
-
-
         if (isMatch && !err){
           // Create the token
           // done send some fields
@@ -148,11 +144,9 @@ exports.verifyUser = (req, res) => {
     // if error or the user cannot be found, return error
     if (err){
       return res.json({ success: false, message: 'Verification error'});
-    }
-    if (foundUser == null) {
+    } else if (foundUser == null) {
       return res.json({ success: false, message: 'This user cannot be verified'});
-    }
-    if (foundUser.code != 0) {
+    } else if (foundUser.code != 0) {
       if (foundUser.verify.attempts > 0) {
         if (foundUser.verify.code == req.body.code) {
           user.findOneAndUpdate({
@@ -164,8 +158,9 @@ exports.verifyUser = (req, res) => {
             // if error or the user cannot be found, return error
             if (err || foundUser == null){
               return res.json({ success: false, message: 'Invalid verification code.'});
+            } else {
+              return res.json({ success: true, message: 'Account verified successfully!'});
             }
-            return res.json({ success: true, message: 'Account verified successfully!'});
           });
         } else {
           return res.json({ success: false, message: 'Invalid verification code.'});
@@ -181,8 +176,9 @@ exports.verifyUser = (req, res) => {
           // if error or the user cannot be found, return error
           if (err || foundUser == null){
             return res.json({ success: false, message: 'Verification failed. User not found'});
+          } else {
+            return res.json({ success: false, newcode: true, message: 'Validation attempts exceeded. Create a new code.'});
           }
-          return res.json({ success: false, newcode: true, message: 'Validation attempts exceeded. Create a new code.'});
         });
       }
     } else {
