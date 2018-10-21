@@ -26,6 +26,10 @@ var UserSchema = new mongoose.Schema({
 		required: true,
 		default: false
 	},
+	tokenBlacklist: {
+		type: [String],
+		required: false
+	},
 	verify: {
 		code: {
 			type: String,

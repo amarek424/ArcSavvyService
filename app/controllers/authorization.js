@@ -73,6 +73,11 @@ exports.authenticateUser = (req, res) => {
     } else {
       // CHeck the password, user just passed
       user.comparePassword(req.body.password, function(err, isMatch){
+
+
+        console.log(user.tokenBlacklist);
+
+
         if (isMatch && !err){
           // Create the token
           user.password = null;
@@ -319,17 +324,15 @@ exports.checkEmailExists = (req, res) => {
 exports.logoutUser = (req, res) => {
   console.log(req.user);
 
-
-  user.findOneAndUpdate({
+  user.findOne({
     _id: req.user._id
-  },
-  {
-    $set: { 'loggedIn': false }
   }, function(err, foundUser){
     // if error or the user cannot be found, return error
     if (err || foundUser == null){
       return res.json({ success: false, message: 'Logout failed!'});
     }
+    foundUser.tokenBlacklist.push('TEST');
+    foundUser.save();
     return res.json({ success: true, message: 'Bye.'});
   });
 }
