@@ -86,4 +86,13 @@ UserSchema.methods.comparePassword = function(pw, cb) {
   });
 };
 
+// UserSchema.methods.checkBlacklist = function(token) {
+// 	var user = this;
+// 	if (token.includes(token)) {
+// 		console.log();
+// 	}
+// 	console.log();
+// }
+
+
 module.exports = mongoose.model('User', UserSchema);
