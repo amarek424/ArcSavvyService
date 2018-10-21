@@ -7,10 +7,11 @@ module.exports = function(passport){
 
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
-  opts.token = tokenExtractor();
+  // opts.token = tokenExtractor();
   opts.secretOrKey = process.env.secret;
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
+    console.log(JSON.stringify(jwt_payload));
     User.findById(jwt_payload._id, function(err, user){
       console.log(opts.token);
       if (err){
