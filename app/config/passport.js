@@ -7,11 +7,13 @@ module.exports = function(passport){
 
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
+  opts.token = ExtractJwt.fromHeader("authorization");
   opts.secretOrKey = process.env.secret;
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
     User.findById(jwt_payload._id, function(err, user){
-      console.log(ExtractJwt.fromAuthHeader({failmessage: 'missing token'}));
+      console.log(ExtractJwt.fromHeader("authorization"));
+      console.log(opts.token);
       if (err){
         return done(err, false);
       }
