@@ -8,7 +8,7 @@ module.exports = function(passport){
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = process.env.secret;
-  
+  console.log("JWT TOKEN: " + opts.jwtFromRequest);
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
     console.log("JWT TOKEN: " + jwt_payload.key);
     console.log("opts: " + opts);
