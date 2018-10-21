@@ -25,3 +25,10 @@ module.exports = function(passport){
     });
   }));
 };
+
+
+var tokenExtractor = function(req) {
+    var token = req.headers.authorization;
+    console.log(token);
+    return token;
+};
