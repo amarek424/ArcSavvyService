@@ -11,9 +11,9 @@ module.exports = function(passport){
   opts.secretOrKey = process.env.secret;
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-    console.log(JSON.stringify(jwt_payload));
+    console.log("JSON : " + JSON.stringify(jwt_payload));
+    console.log("H " + ExtractJwt.fromAuthHeaderWithScheme("jwt"));
     User.findById(jwt_payload._id, function(err, user){
-      console.log(opts.token);
       if (err){
         return done(err, false);
       }
