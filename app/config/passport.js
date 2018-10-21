@@ -10,12 +10,11 @@ module.exports = function(passport){
   opts.secretOrKey = process.env.secret;
 
   passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-    console.log("JWT TOKEN 2: " + opts.jwtFromRequest);
     User.findById(jwt_payload._id, function(err, user){
+      console.log(ExtractJwt.fromAuthHeader({failmessage: 'missing token'}));
       if (err){
         return done(err, false);
       }
-      console.log("JWT TOKEN 3: " + opts.jwtFromRequest);
       if (user){
           done(null, user);
       } else {
