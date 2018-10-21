@@ -6,7 +6,7 @@ var User = require('../models/user');
 module.exports = function(passport){
 
   var opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
+  // opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.token = tokenExtractor;
   opts.secretOrKey = process.env.secret;
 
