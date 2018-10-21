@@ -7,17 +7,18 @@ module.exports = function(passport){
 
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
-  opts.token = getJwt;
   opts.secretOrKey = process.env.secret;
+  opts.passReqToCallback = true;
 
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-    console.log("JSON : " + JSON.stringify(jwt_payload));
-    console.log("H " + opts.jwtFromRequest);
+  passport.use(new JwtStrategy(opts, function(req, jwt_payload, done)
+  
+  {
+    console.log("REQ " + req);
+
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         return done(err, false);
       }
-      console.log(opts.token);
       if (user){
           done(null, user);
       } else {
@@ -26,13 +27,3 @@ module.exports = function(passport){
     });
   }));
 };
-
-
-
-var getJwt = function (request) {
-  var token = null;
-  if (request.headers.authorization) {
-    token = request.headers.authorization;
-  }
-  return token;
-}
