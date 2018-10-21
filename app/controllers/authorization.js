@@ -75,7 +75,7 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
 
         console.log("EMAIL: " + user.email);
-        console.log("BL: :" + user.tokenBlacklist);
+        console.log("BL: " + user.tokenBlacklist);
 
 
         if (isMatch && !err){
@@ -323,7 +323,7 @@ exports.checkEmailExists = (req, res) => {
 // This function marks the User as logged out in the DB, which is checked by PassPort before token is accepted.
 exports.logoutUser = (req, res) => {
   console.log(req.user);
-
+  console.log(req.headers.authorization);
   user.findOne({
     _id: req.user._id
   }, function(err, foundUser){
