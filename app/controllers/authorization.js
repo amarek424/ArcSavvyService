@@ -303,8 +303,8 @@ exports.checkEmailExists = (req, res) => {
       console.log(err);
       res.json({ success: true, message: 'Error: please try again'});
     }
-    console.log(user.email);
-    if (foundAccount == null || foundAccount = undefined) {
+    console.log(user);
+    if (foundAccount == null || foundAccount == undefined) {
       res.json({ success: true, message: 'Email available'});
     } else {
       res.json({ success: false, message: 'Email already exists'});
