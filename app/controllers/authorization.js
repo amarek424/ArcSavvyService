@@ -322,7 +322,6 @@ exports.checkEmailExists = (req, res) => {
 // WARNING! JWT tokens are STILL ACTIVE even when a user logs out.
 // This function marks the User as logged out in the DB, which is checked by PassPort before token is accepted.
 exports.logoutUser = (req, res) => {
-
   user.findOne({
     _id: req.user._id
   }, function(err, foundUser){
