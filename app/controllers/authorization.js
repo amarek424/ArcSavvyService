@@ -74,8 +74,8 @@ exports.authenticateUser = (req, res) => {
       // CHeck the password, user just passed
       user.comparePassword(req.body.password, function(err, isMatch){
 
-
-        console.log(user.tokenBlacklist);
+        console.log("EMAIL: " + user.email);
+        console.log("BL: :" + user.tokenBlacklist);
 
 
         if (isMatch && !err){
