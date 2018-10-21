@@ -80,9 +80,12 @@ exports.authenticateUser = (req, res) => {
 
         if (isMatch && !err){
           // Create the token
+          // done send some fields
           user.password = null;
           user.verify = null;
           user.loggedIn = null;
+          user.tokenBlacklist = null;
+
           userJson = user.toJSON();
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 3600
