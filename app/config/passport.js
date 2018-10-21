@@ -22,8 +22,9 @@ module.exports = function(passport){
       if (user){
           if (user.tokenBlacklist.includes(tokenFromRequest)) {
             done(null, false);
+          } else {
+            done(null, user);
           }
-          done(null, user);
       } else {
         done(null, false);
       }
