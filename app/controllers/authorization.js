@@ -3,7 +3,7 @@ var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
 var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
-var helpers = require('helpers');
+var helpers = require('../helpers');
 const user = require('../models/user');
 
 
@@ -335,7 +335,7 @@ exports.logoutUser = (req, res) => {
       return res.json({ success: false, message: 'Logout failed!'});
     }
     // ADD FUNCTION TO REMOVE FROM WHITELIST
-    foundUser.tokenWhitelist.pop(req.headers.authorization);
+    foundUser.tokenWhitelist = helpers.removeFromWhitelist(foundUser, req.headers.authorization);
     foundUser.save();
     return res.json({ success: true, message: 'Bye.'});
   });
