@@ -76,8 +76,10 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
 
         if (isMatch && !err){
+          console.log("Match on " + req.body.email);
           // Update profile with whitelist
           let whitehash = helpers.generateWhitehash(user);
+          console.log(whitehash);
           // Remove oldest hash from whitelist if full
           if (user.tokenWhitelist.length >= 3) {
             user.tokenWhitelist.shift();
