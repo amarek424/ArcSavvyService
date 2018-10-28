@@ -13,17 +13,18 @@ module.exports = function(passport){
   passport.use(new JwtStrategy(opts, function(req, jwt_payload, done)
   
   {
-    var tokenFromRequest = req.headers.authorization;
+    //var tokenFromRequest = req.headers.authorization;
     console.log(tokenFromRequest);
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         return done(err, false);
       }
       if (user){
-          if (user.tokenBlacklist.includes(tokenFromRequest)) {
-            done(null, false);
-          } else {
+          if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
+            console.log(jwt_payload.tokenWhitelist);
             done(null, user);
+          } else {
+            done(null, false);
           }
       } else {
         done(null, false);

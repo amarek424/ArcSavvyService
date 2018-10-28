@@ -26,7 +26,7 @@ var UserSchema = new mongoose.Schema({
 		required: true,
 		default: false
 	},
-	tokenBlacklist: {
+	tokenWhitelist: {
 		type: [String],
 		required: false
 	},

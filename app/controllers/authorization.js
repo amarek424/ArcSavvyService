@@ -3,6 +3,7 @@ var crypto = require('crypto');
 var async = require('async');
 var bcrypt = require('bcrypt');
 var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: process.env.mailgundomain});
+var helpers = require('helpers');
 const user = require('../models/user');
 
 
@@ -75,12 +76,20 @@ exports.authenticateUser = (req, res) => {
       user.comparePassword(req.body.password, function(err, isMatch){
 
         if (isMatch && !err){
+          // Update profile with whitelist
+          let whitehash = helpers.generateWhitehash(user);
+          // Remove oldest hash from whitelist if full
+          if (user.tokenWhitelist.length >= 3) {
+            user.tokenWhitelist.shift();
+          }
+          user.tokenWhitelist.push(whitehash);
+          user.save()
           // Create the token
           // done send some fields
           user.password = null;
           user.verify = null;
           user.loggedIn = null;
-          user.tokenBlacklist = null;
+          user.tokenWhitelist = whitehash;
 
           userJson = user.toJSON();
           var token = jwt.sign(userJson, process.env.secret, {
@@ -325,7 +334,8 @@ exports.logoutUser = (req, res) => {
     if (err || foundUser == null){
       return res.json({ success: false, message: 'Logout failed!'});
     }
-    foundUser.tokenBlacklist.push(req.headers.authorization);
+    // ADD FUNCTION TO REMOVE FROM WHITELIST
+    foundUser.tokenWhitelist.pop(req.headers.authorization);
     foundUser.save();
     return res.json({ success: true, message: 'Bye.'});
   });
