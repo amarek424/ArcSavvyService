@@ -2,13 +2,13 @@ const cryptoRandomString = require('crypto-random-string');
 
 
 // Generates a random hash and makes sure it doesn't match any of the existing
-exports.generateWhitehash(user) {
+exports.generateWhitehash = function(user) {
 	var hash = cryptoRandomString(8);
 	return hash;
 }
 
 // Removes a hash from the whitelist
-exports.removeFromWhitelist(user, hash) {
+exports.removeFromWhitelist = function(user, hash) {
 	var tokenWhitelist = user.tokenWhitelist;
 	for (var i = tokenWhitelist.length-1; i >= 0; i--) {
 		if (tokenWhitelist[i] === hash) {
