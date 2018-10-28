@@ -3,7 +3,9 @@ const cryptoRandomString = require('crypto-random-string');
 
 // Generates a random hash and makes sure it doesn't match any of the existing
 exports.generateWhitehash = function(user) {
+	console.log("Generating hash...");
 	var hash = cryptoRandomString(8);
+	console.log("Hash: " + hash);
 	return hash;
 }
 
