@@ -93,12 +93,14 @@ exports.authenticateUser = (req, res) => {
           });
           // Create the token
           // done send some fields
-          foundUser.password = null;
-          foundUser.verify = null;
-          foundUser.loggedIn = null;
-          user.tokenWhitelist = whitehash;
+          jsonUser = foundUser;
 
-          userJson = foundUser.toJSON();
+          jsonUser.password = null;
+          jsonUser.verify = null;
+          jsonUser.loggedIn = null;
+          jsonUser.tokenWhitelist = whitehash;
+
+          userJson = jsonUser.toJSON();
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 3600
           });
