@@ -93,7 +93,8 @@ exports.authenticateUser = (req, res) => {
           });
           // Create the token
           // done send some fields
-          var jsonUser = foundUser;
+          var jsonUser = new user();
+          jsonUser = JSON.parse(JSON.stringify(foundUser));;
 
           jsonUser.password = null;
           jsonUser.verify = null;
