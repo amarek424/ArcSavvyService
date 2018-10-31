@@ -274,7 +274,7 @@ exports.resetPassword = (req, res) => {
       $gt: Date.now()
     }}).exec(function(err, resetUser) {
     if(err || resetUser == null){
-      res.json({ success: false, message: 'Token bad or expired!'})
+      res.json({ success: false, message: 'Token bad or expired!'});
     }
     // check if the two passwords in the form match before continuing
     if (req.body.newPassword === req.body.verifyPassword){
@@ -349,4 +349,3 @@ exports.logoutUser = (req, res) => {
     return res.json({ success: true, message: 'Bye.'});
   });
 }
-
