@@ -81,9 +81,9 @@ exports.authenticateUser = (req, res) => {
           let whitehash = helpers.generateWhitehash(user);
           console.log(whitehash);
           // Remove oldest hash from whitelist if full
-          if (user.tokenWhitelist.length >= 3) {
-            user.tokenWhitelist.shift();
-          }
+          // if (user.tokenWhitelist.length >= 3) {
+          //   user.tokenWhitelist.shift();
+          // }
           user.tokenWhitelist.push(whitehash);
           console.log(user.tokenWhitelist);
           user.save()
