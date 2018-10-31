@@ -86,7 +86,11 @@ exports.authenticateUser = (req, res) => {
           // }
           foundUser.tokenWhitelist.push(whitehash);
           console.log(foundUser.tokenWhitelist);
-          foundUser.save();
+          foundUser.save(function(err) {
+            if (err) {
+              console.log(err);
+            }
+          });
           // Create the token
           // done send some fields
           foundUser.password = null;
