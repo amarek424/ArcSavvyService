@@ -6,7 +6,6 @@ var mailgun = require('mailgun-js')({apiKey: process.env.mailgunapikey, domain: 
 var helpers = require('../helpers');
 const user = require('../models/user');
 
-
 // Creates a new user and sends verify email
 // POST Params:
 // body.email - the new users email address, must be unique
@@ -116,7 +115,6 @@ exports.authenticateUser = (req, res) => {
 
 // Create a new validation code
 // POST params
-
 // email - the email of the account to verify
 exports.createNewValidateCode = (req, res) => {
   newCode = Math.floor(100000 + Math.random() * 900000);
@@ -204,7 +202,6 @@ exports.verifyUser = (req, res) => {
     }
   });
 }
-
 
 // Reset user password
 // POST params
@@ -312,8 +309,6 @@ exports.resetPassword = (req, res) => {
   });
 };
 
-
-
 // check if the given email address is available
 exports.checkEmailExists = (req, res) => {
   user.findOne({email: req.body.email}).exec(function(err, foundAccount) {
@@ -330,7 +325,6 @@ exports.checkEmailExists = (req, res) => {
     }
   })
 }
-
 
 // log the user out. 
 // WARNING! JWT tokens are STILL ACTIVE even when a user logs out.

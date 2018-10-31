@@ -15,11 +15,10 @@ module.exports = function(passport){
   {
     User.findById(jwt_payload._id, function(err, user){
       if (err){
-        return done(err, false);
+        done(err, false);
       }
       if (user){
           if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
-            console.log(jwt_payload.tokenWhitelist);
             done(null, user);
           } else {
             done(null, false);
