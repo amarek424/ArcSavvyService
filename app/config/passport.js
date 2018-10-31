@@ -14,7 +14,7 @@ module.exports = function(passport){
   
   {
     //var tokenFromRequest = req.headers.authorization;
-    console.log(tokenFromRequest);
+    // console.log(tokenFromRequest);
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         return done(err, false);
