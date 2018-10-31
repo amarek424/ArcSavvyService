@@ -73,7 +73,7 @@ exports.authenticateUser = (req, res) => {
       res.send({success: false, message: 'Authentication failed. User not found.'});
     } else {
       // CHeck the password, user just passed
-      user.comparePassword(req.body.password, function(err, isMatch){
+      foundUser.comparePassword(req.body.password, function(err, isMatch){
 
         if (isMatch && !err){
           console.log("Match on " + req.body.email);
