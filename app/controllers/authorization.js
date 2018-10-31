@@ -93,19 +93,18 @@ exports.authenticateUser = (req, res) => {
               console.log(err);
             }
       
+            foundUser.password = null;
+            foundUser.verify = null;
+            foundUser.loggedIn = null;
+            foundUser.tokenWhitelist = whitehash;
+
+            userJson = foundUser.toJSON();
+            var token = jwt.sign(userJson, process.env.secret, {
+              expiresIn: 3600
+            });
+
+            res.json({ success: true, token: 'JWT ' + token});
           });
-
-
-          foundUser.password = null;
-          foundUser.verify = null;
-          foundUser.loggedIn = null;
-          foundUser.tokenWhitelist = whitehash;
-
-          userJson = foundUser.toJSON();
-          var token = jwt.sign(userJson, process.env.secret, {
-            expiresIn: 3600
-          });
-          res.json({ success: true, token: 'JWT ' + token});
         } else {
           //password doesnt match
           res.json({ success: false, message: 'Authentication failed. No password match.'});
