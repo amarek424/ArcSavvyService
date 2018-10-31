@@ -76,22 +76,23 @@ exports.authenticateUser = (req, res) => {
       foundUser.comparePassword(req.body.password, function(err, isMatch){
 
         if (isMatch && !err){
-          console.log("Match on " + req.body.email);
           // Update profile with whitelist
           let whitehash = helpers.generateWhitehash(user);
-          console.log(whitehash);
           // Remove oldest hash from whitelist if full
-          // if (user.tokenWhitelist.length >= 3) {
-          //   user.tokenWhitelist.shift();
-          // }
+          if (foundUser.tokenWhitelist.length >= 3) {
+            foundUser.tokenWhitelist.shift();
+          }
+
+          foundUser.tokenWhitelist.push(whitehash);
+
           user.findOneAndUpdate({ email: foundUser.email },
           {
-            $push: { tokenWhitelist: whitehash }
+            $set: { tokenWhitelist: foundUser.tokenWhitelist }
           }, function(err, foundUser) {
             if (err || foundUser == null){
               console.log(err);
             }
-            
+      
           });
 
 
