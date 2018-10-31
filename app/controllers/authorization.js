@@ -67,7 +67,7 @@ exports.registerUser = (req, res) => {
 exports.authenticateUser = (req, res) => {
   user.findOne({
     email: req.body.email
-  }, function(err, user){
+  }, function(err, foundUser){
     if (err) throw err;
     if (!user){
       res.send({success: false, message: 'Authentication failed. User not found.'});
