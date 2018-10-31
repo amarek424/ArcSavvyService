@@ -15,16 +15,16 @@ module.exports = function(passport){
   {
     User.findById(jwt_payload._id, function(err, user){
       if (err){
-        done(err, false);
+        return done(err, false);
       }
       if (user){
           if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
-            done(null, user);
+            return done(null, user);
           } else {
-            done(null, false);
+            return done(null, false);
           }
       } else {
-        done(null, false);
+        return done(null, false);
       }
     });
   }));
