@@ -85,6 +85,7 @@ exports.authenticateUser = (req, res) => {
             user.tokenWhitelist.shift();
           }
           user.tokenWhitelist.push(whitehash);
+          console.log(user.tokenWhitelist);
           user.save()
           // Create the token
           // done send some fields
