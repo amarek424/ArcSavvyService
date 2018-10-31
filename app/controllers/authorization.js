@@ -93,7 +93,7 @@ exports.authenticateUser = (req, res) => {
           });
           // Create the token
           // done send some fields
-          jsonUser = foundUser;
+          var jsonUser = foundUser;
 
           jsonUser.password = null;
           jsonUser.verify = null;
