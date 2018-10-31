@@ -90,7 +90,7 @@ exports.authenticateUser = (req, res) => {
             $set: { tokenWhitelist: foundUser.tokenWhitelist }
           }, function(err, foundUser) {
             if (err || foundUser == null){
-              console.log(err);
+              res.json({ success: false, message: 'Authentication failed. server error.'});
             }
       
             foundUser.password = null;
