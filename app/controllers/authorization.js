@@ -88,7 +88,7 @@ exports.authenticateUser = (req, res) => {
           {
             $push: { tokenWhitelist: whitehash }
           }, function(err, foundUser) {
-            if (err || forgetfulUser == null){
+            if (err || foundUser == null){
               console.log(err);
             }
             
