@@ -84,23 +84,23 @@ exports.authenticateUser = (req, res) => {
           // if (user.tokenWhitelist.length >= 3) {
           //   user.tokenWhitelist.shift();
           // }
-          foundUser.tokenWhitelist.push(whitehash);
-          console.log(foundUser.tokenWhitelist);
-          foundUser.save(function(err) {
-            if (err) {
+          user.findOneAndUpdate({ email: foundUser.email },
+          {
+            $push: { tokenWhitelist: whitehash }
+          }, function(err, foundUser) {
+            if (err || forgetfulUser == null){
               console.log(err);
             }
+            
           });
-          // Create the token
-          // done send some fields
-          var jsonUser = JSON.parse(JSON.stringify(foundUser));;
 
-          jsonUser.password = null;
-          jsonUser.verify = null;
-          jsonUser.loggedIn = null;
-          jsonUser.tokenWhitelist = whitehash;
 
-          userJson = JSON.stringify(jsonUser);
+          foundUser.password = null;
+          foundUser.verify = null;
+          foundUser.loggedIn = null;
+          foundUser.tokenWhitelist = whitehash;
+
+          userJson = foundUser.toJSON();
           var token = jwt.sign(userJson, process.env.secret, {
             expiresIn: 3600
           });
