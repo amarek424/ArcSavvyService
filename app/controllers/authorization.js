@@ -338,8 +338,10 @@ exports.logoutUser = (req, res) => {
       return res.json({ success: false, message: 'Logout failed!'});
     }
     // ADD FUNCTION TO REMOVE FROM WHITELIST
+    console.log("Before: " + foundUser.tokenWhitelist);
     foundUser.tokenWhitelist = helpers.removeFromWhitelist(foundUser, req.headers.authorization);
     foundUser.save();
+    console.log("After: " + foundUser.tokenWhitelist);
     return res.json({ success: true, message: 'Bye.'});
   });
 }

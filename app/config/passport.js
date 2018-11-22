@@ -30,6 +30,7 @@ module.exports = function(passport){
             return;
           }
       } else {
+        console.log("Not a chance");
         done(null, false);
         return;
       }
