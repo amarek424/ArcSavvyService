@@ -20,7 +20,7 @@ module.exports = function(passport){
       if (user){
           console.log("Here: " + jwt_payload.tokenWhitelist);
           console.log("User: " + user.tokenWhitelist);
-          if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
+          if (user.tokenWhitelist.indexOf(jwt_payload.tokenWhitelist) > -1) {
             console.log("No problem");
             done(null, user);
             return;
