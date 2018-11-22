@@ -11,19 +11,23 @@ module.exports = function(passport){
   opts.passReqToCallback = true;
   opts.passReqToCallback = true;
 
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+  passport.use(new JwtStrategy(opts, function(req, jwt_payload, done) {
     User.findById(jwt_payload._id, function(err, user){
       if (err){
-        return done(err, false);
+        done(err, false);
+        return;
       }
       if (user){
           if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
-            return done(null, user);
+            done(null, user);
+            return;
           } else {
-            return done(null, false);
+            done(null, false);
+            return;
           }
       } else {
-        return done(null, false);
+        done(null, false);
+        return;
       }
     });
   }));
