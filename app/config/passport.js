@@ -9,12 +9,9 @@ module.exports = function(passport){
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = process.env.secret;
   opts.passReqToCallback = true;
+  opts.passReqToCallback = true;
 
-  passport.use(new JwtStrategy({
-    passReqToCallBack: true
-  },
-  (opts, jwt_payload, done) => 
-  {
+  passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         return done(err, false);
