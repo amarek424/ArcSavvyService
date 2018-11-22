@@ -18,6 +18,7 @@ module.exports = function(passport){
         return;
       }
       if (user){
+          console.log("Here: " + jwt_payload.tokenWhitelist);
           if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
             done(null, user);
             return;
