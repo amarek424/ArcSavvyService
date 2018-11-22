@@ -19,10 +19,13 @@ module.exports = function(passport){
       }
       if (user){
           console.log("Here: " + jwt_payload.tokenWhitelist);
+          console.log("User: " + user.tokenWhitelist);
           if (user.tokenWhitelist.includes(jwt_payload.tokenWhitelist)) {
+            console.log("No problem");
             done(null, user);
             return;
           } else {
+            console.log("No dice");
             done(null, false);
             return;
           }
