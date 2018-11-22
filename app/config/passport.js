@@ -10,9 +10,10 @@ module.exports = function(passport){
   opts.secretOrKey = process.env.secret;
   opts.passReqToCallback = true;
 
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done)
-  
+  passport.use(new JwtStrategy(opts, function(jwt_payload, done)  
   {
+    passReqToCallBack: true
+  }, {
     User.findById(jwt_payload._id, function(err, user){
       if (err){
         return done(err, false);
