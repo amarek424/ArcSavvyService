@@ -67,7 +67,6 @@ exports.authenticateUser = (req, res) => {
   user.findOne({
     email: req.body.email
   }, function(err, foundUser){
-    console.log('HERE');
     if (err) throw err;
     if (!user){
       res.send({success: false, message: 'Authentication failed. User not found.'});
@@ -94,7 +93,7 @@ exports.authenticateUser = (req, res) => {
             }
 
             console.log(foundUser.verify);
-            if (foundUser.verify) {
+            if (foundUser.verify != null) {
               res.json({ success: false, message: 'Email verification still required.'});
             }
 
