@@ -90,24 +90,24 @@ exports.authenticateUser = (req, res) => {
           }, function(err, foundUser) {
             if (err || foundUser == null){
               res.json({ success: false, message: 'Authentication failed. server error.'});
+            } else {
+              console.log(foundUser.verify);
+              if (foundUser.verify != null) {
+                res.json({ success: false, message: 'Email verification still required.'});
+              } else {
+                foundUser.password = null;
+                foundUser.verify = null;
+                foundUser.loggedIn = null;
+                foundUser.tokenWhitelist = whitehash;
+
+                userJson = foundUser.toJSON();
+                var token = jwt.sign(userJson, process.env.secret, {
+                  expiresIn: 3600
+                });
+
+                res.json({ success: true, token: 'JWT ' + token});
+              }
             }
-
-            console.log(foundUser.verify);
-            if (foundUser.verify != null) {
-              res.json({ success: false, message: 'Email verification still required.'});
-            }
-
-            foundUser.password = null;
-            foundUser.verify = null;
-            foundUser.loggedIn = null;
-            foundUser.tokenWhitelist = whitehash;
-
-            userJson = foundUser.toJSON();
-            var token = jwt.sign(userJson, process.env.secret, {
-              expiresIn: 3600
-            });
-
-            res.json({ success: true, token: 'JWT ' + token});
           });
         } else {
           //password doesnt match
