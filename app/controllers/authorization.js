@@ -175,9 +175,10 @@ exports.verifyUser = (req, res) => {
           },
           {
             $unset: { verify: true } // Was 'null' instead of 'true'
-          }
-          {multi: true, safe: true}
-          , function(err, foundUser){
+          },
+          {
+            multi: true, safe: true
+          }, function(err, foundUser){
             // if error or the user cannot be found, return error
             if (err || foundUser == null){
               return res.json({ success: false, message: 'Unable to complete verification.'});
