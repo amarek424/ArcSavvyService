@@ -175,7 +175,9 @@ exports.verifyUser = (req, res) => {
           },
           {
             $unset: { verify: true } // Was 'null' instead of 'true'
-          }, function(err, foundUser){
+          }
+          {multi: true, safe: true}
+          , function(err, foundUser){
             // if error or the user cannot be found, return error
             if (err || foundUser == null){
               return res.json({ success: false, message: 'Unable to complete verification.'});
@@ -186,7 +188,6 @@ exports.verifyUser = (req, res) => {
         } else {
           return res.json({ success: false, message: 'Invalid verification code.'});
         }
-
       } else {
         user.findOneAndUpdate({
           email: req.body.email
