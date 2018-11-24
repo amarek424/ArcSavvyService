@@ -93,7 +93,7 @@ exports.authenticateUser = (req, res) => {
             } else {
               console.log(foundUser.verify);
               if (foundUser.verify != null) {
-                res.json({ success: false, message: 'Email verification still required.'});
+                res.json({ success: false, message: 'Email verification still required.', code: 6});
               } else {
                 foundUser.password = null;
                 foundUser.verify = null;
@@ -174,11 +174,11 @@ exports.verifyUser = (req, res) => {
             email: req.body.email
           },
           {
-            $unset: { verify: null }
+            $unset: { verify: true } // Was 'null' instead of 'true'
           }, function(err, foundUser){
             // if error or the user cannot be found, return error
             if (err || foundUser == null){
-              return res.json({ success: false, message: 'Invalid verification code.'});
+              return res.json({ success: false, message: 'Unable to complete verification.'});
             } else {
               return res.json({ success: true, message: 'Account verified successfully!'});
             }
