@@ -294,7 +294,7 @@ exports.forgotPassword = (req, res) => {
 
     }
   ], function(err) {
-    return res.status(422).json({ message: err });
+    return res.status(200).json({ success: false, message: err });
   });
 };
 
