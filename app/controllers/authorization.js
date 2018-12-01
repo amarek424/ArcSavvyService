@@ -116,11 +116,9 @@ exports.authenticateUser = (req, res) => {
             if (err || foundUser == null){
               res.json({ success: false, message: 'Authentication failed. server error.'});
             } else {
-              console.log(foundUser.verify);
-              if (foundUser.verify) {
-                if (foundUser.verify.code){
-                  res.json({ success: false, message: 'Email verification still required.', code: 6});
-                }
+              console.log(foundUser);
+              if (foundUser.verify.code) {
+                res.json({ success: false, message: 'Email verification still required.', code: 6});
               } else {
                 foundUser.password = null;
                 foundUser.verify = null;
