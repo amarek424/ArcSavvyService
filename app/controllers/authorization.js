@@ -301,7 +301,7 @@ exports.forgotPassword = (req, res) => {
 // resets the users password
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
-  user.findOne({email: req.body.email, reset_password_token: req.body.token, reset_password_expires: {
+  user.findOne({reset_password_token: req.body.token, reset_password_expires: {
       $gt: Date.now()
     }}).exec(function(err, resetUser) {
     if(err || resetUser == null){
