@@ -143,7 +143,7 @@ exports.createNewValidateCode = (req, res) => {
       if (err){
         console.log('Mailgun ERROR!');
       }
-      return res.json({ success: true, message: 'New validation code created.\"<br>\"Check your inbox.'});
+      return res.json({ success: true, message: 'New validation code created.</p><br><p>Check your inbox.'});
 
     });
   });
