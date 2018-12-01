@@ -41,7 +41,7 @@ exports.registerUser = (req, res) => {
         from: 'ArcSavvy <amarek424@gmail.com>',
         to: newUser.email,
         subject: 'ArcSavvy Account Verification',
-        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to <a href="http://localhost:4200/verify/bdor528@gmail.com">verify</a> your email address.</p><label>' + newUser.verify.code + '</label>'
+        html: '<h2>Welcome to ArcSavvy!</h2><p>You need to <a href="http://localhost:4200/verify/' + req.body.email + '>verify</a> your email address.</p><label>' + newUser.verify.code + '</label>'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
@@ -156,17 +156,16 @@ exports.createNewValidateCode = (req, res) => {
 exports.verifyUser = (req, res) => {
   // find user and clear its unverified status
   user.findOneAndUpdate({
-    email: req.body.email,
-    verify: { $exists: true }
+    email: req.body.email
   },
   {
     $inc: { 'verify.attempts': -1 }
   }, function(err, foundUser){
     // if error or the user cannot be found, return error
     if (err){
-      return res.json({ success: false, message: 'Verification error'});
+      return res.json({ success: false, message: 'Verification error.'});
     } else if (foundUser == null) {
-      return res.json({ success: false, message: 'This user cannot be verified'});
+      return res.json({ success: false, message: 'This user cannot be found.'});
     } else if (foundUser.code != 0) {
       if (foundUser.verify.attempts > 0) {
         if (foundUser.verify.code == req.body.code) {
