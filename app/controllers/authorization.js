@@ -283,7 +283,7 @@ exports.forgotPassword = (req, res) => {
         from: 'ArcSavvy <amarek424@gmail.com>',
         to: forgetfulUser.email,
         subject: 'Reset your ArcSavvy account password now',
-        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="http://localhost:4200/reset/' + token + '">Reset Password</a><br></p>'
+        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="http://localhost:4200/passwordreset/' + token + '">Reset Password</a><br></p>'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
