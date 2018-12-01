@@ -137,13 +137,13 @@ exports.createNewValidateCode = (req, res) => {
       from: 'ArcSavvy <bdor528@gmail.com>',
       to: foundUser.email,
       subject: 'ArcSavvy Account Verification',
-      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br><label>' + newCode + '</label>'
+      html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br/><label>' + newCode + '</label>'
     };
     mailgun.messages().send(message, function (err, body){
       if (err){
         console.log('Mailgun ERROR!');
       }
-      return res.json({ success: true, message: 'New validation code created.</p><br><p>Check your inbox.'});
+      return res.json({ success: true, message: 'New validation code created.</p><br/><p>Check your inbox.'});
 
     });
   });
