@@ -92,7 +92,7 @@ exports.authenticateUser = (req, res) => {
               res.json({ success: false, message: 'Authentication failed. server error.'});
             } else {
               console.log(foundUser.verify);
-              if (foundUser.verify != null) {
+              if (foundUser.verify) {
                 res.json({ success: false, message: 'Email verification still required.', code: 6});
               } else {
                 foundUser.password = null;
@@ -166,14 +166,15 @@ exports.verifyUser = (req, res) => {
       return res.json({ success: false, message: 'Verification error.'});
     } else if (foundUser == null) {
       return res.json({ success: false, message: 'This user cannot be found.'});
-    } else if (foundUser.code != 0) {
-      if (foundUser.verify.attempts > 0) {
+    } else if (foundUser.verify) {
+      return res.json({ success: false, message: 'This user is already verified.'})
+    } else if (foundUser.verify.attempts > 0) {
         if (foundUser.verify.code == req.body.code) {
           user.findOneAndUpdate({
             email: req.body.email
           },
           {
-            $unset: { verify: undefined } // Was 'null' instead of 'true'
+            $unset: { verify: undefined, verify.code: undefined, verify.attempts: undefined } // Was 'null' instead of 'true'
           },
           {
             multi: true, safe: true
