@@ -48,13 +48,42 @@ exports.registerUser = (req, res) => {
           console.log('Mailgun ERROR!');
           console.log(err);
         }
-        console.log(body);
+
+        // Update profile with whitelist
+        let whitehash = helpers.generateWhitehash(user);
+        // Remove oldest hash from whitelist if full
+        if (newUser.tokenWhitelist.length >= 3) {
+          newUser.tokenWhitelist.shift();
+        }
+
+        newUser.tokenWhitelist.push(whitehash);
+
+        user.findOneAndUpdate({ email: newUser.email },
+        {
+          $set: { tokenWhitelist: newUser.tokenWhitelist }
+        }, function(err, foundUser) {
+          if (err || foundUser == null){
+            res.json({ success: false, message: 'Authentication failed. server error.'});
+          } else {
+            console.log(foundUser.verify);
+            if (foundUser.verify) {
+              res.json({ success: false, message: 'Email verification still required.', code: 6});
+            } else {
+              foundUser.password = null;
+              foundUser.verify = null;
+              foundUser.loggedIn = null;
+              foundUser.tokenWhitelist = whitehash;
+
+              userJson = foundUser.toJSON();
+              var token = jwt.sign(userJson, process.env.secret, {
+                expiresIn: 3600
+              });
+
+              res.json({ success: true, token: 'JWT ' + token, message: 'Successfully created new user.'});
+            }
+          }
+        });
       });
-    //   res.json({ success: true, message: 'Successfully created new user.'});
-    // });
-    // console.log("Email Should be sent. Mailgun fix.");
-    // console.log(message);
-      res.json({ success: true, message: 'Successfully created new user.'});
     });
   }
 }
@@ -204,9 +233,9 @@ exports.verifyUser = (req, res) => {
         }, function(err, foundUser){
           // if error or the user cannot be found, return error
           if (err || foundUser == null){
-            return res.json({ success: false, message: 'Verification failed. User not found'});
+            return res.json({ success: false, message: 'Verification failed.\nUser not found'});
           } else {
-            return res.json({ success: false, message: 'Validation attempts exceeded. Create a new code.', code: 7});
+            return res.json({ success: false, message: 'Validation attempts exceeded.\nCreate a new code.', code: 7});
           }
         });
       }
@@ -265,7 +294,7 @@ exports.forgotPassword = (req, res) => {
         if (err){
           return res.json({ success: false, message: 'Message error!'});
         }
-        res.json({ success: true, message: 'Password reset link sent. Check your inbox.'});
+        res.json({ success: true, message: 'Password reset link sent.\nCheck your inbox.'});
       });
 
     }
