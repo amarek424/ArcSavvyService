@@ -188,7 +188,11 @@ exports.verifyUser = (req, res) => {
             }
           });
         } else {
-          return res.json({ success: false, message: 'Invalid verification code.'});
+          response_message = 'Invalid verification code.';
+          if (foundUser.verify.attempts === 1) {
+            response_message += '/nValidation attempts exceeded.'
+          }
+          return res.json({ success: false, message: response_message});
         }
       // Attempts exceeded
       } else {
