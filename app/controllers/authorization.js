@@ -159,7 +159,7 @@ exports.createNewValidateCode = (req, res) => {
       return res.json({ success: false, message: 'Cannot create new code for that user.'});
     }
     var message = {
-      from: 'ArcSavvy <bdor528@gmail.com>',
+      from: 'ArcSavvy <amarek424@gmail.com>',
       to: foundUser.email,
       subject: 'ArcSavvy Account Verification',
       html: '<h2>Welcome to ArcSavvy!</h2><p>You need to verify your email address.</p><br/><label>' + newCode + '</label>'
@@ -280,10 +280,10 @@ exports.forgotPassword = (req, res) => {
     function(token, forgetfulUser, done) {
       // Send the link and code to the user via email
       var message = {
-        from: 'ArcSavvy <bdor528@gmail.com>',
+        from: 'ArcSavvy <amarek424@gmail.com>',
         to: forgetfulUser.email,
         subject: 'Reset your ArcSavvy account password now',
-        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="https://http://localhost:4200/reset/' + token + '>Reset Password</a><br></p>'
+        html: '<h2>Forgot your ArcSavvy password?</h2><p>Reset your password here <a href="http://localhost:4200/reset/' + token + '">Reset Password</a><br></p>'
       };
       mailgun.messages().send(message, function (err, body){
         if (err){
