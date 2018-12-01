@@ -65,22 +65,18 @@ exports.registerUser = (req, res) => {
           if (err || foundUser == null){
             res.json({ success: false, message: 'Authentication failed. server error.'});
           } else {
-            console.log(foundUser.verify);
-            if (foundUser.verify) {
-              res.json({ success: false, message: 'Email verification still required.', code: 6});
-            } else {
-              foundUser.password = null;
-              foundUser.verify = null;
-              foundUser.loggedIn = null;
-              foundUser.tokenWhitelist = whitehash;
 
-              userJson = foundUser.toJSON();
-              var token = jwt.sign(userJson, process.env.secret, {
-                expiresIn: 3600
-              });
+            foundUser.password = null;
+            foundUser.verify = null;
+            foundUser.loggedIn = null;
+            foundUser.tokenWhitelist = whitehash;
 
-              res.json({ success: true, token: 'JWT ' + token, message: 'Successfully created new user.'});
-            }
+            userJson = foundUser.toJSON();
+            var token = jwt.sign(userJson, process.env.secret, {
+              expiresIn: 3600
+            });
+
+            res.json({ success: true, token: 'JWT ' + token, message: 'Successfully created new user.'});
           }
         });
       });
