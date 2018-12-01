@@ -162,13 +162,14 @@ exports.verifyUser = (req, res) => {
     $inc: { 'verify.attempts': -1 }
   }, function(err, foundUser){
     // if error or the user cannot be found, return error
+    console.log(foundUser);
     if (err){
       return res.json({ success: false, message: 'Verification error.'});
     } else if (foundUser == null) {
       return res.json({ success: false, message: 'This user cannot be found.'});
     } else if (foundUser.verify) {
       return res.json({ success: false, message: 'This user is already verified.'})
-    } else if (foundUser.verify.attempts > -1) {
+    } else if (foundUser.verify.attempts > 0) {
         // Verification code correct: Delete verification field
         if (foundUser.verify.code == req.body.code) {
           user.findOneAndUpdate({
