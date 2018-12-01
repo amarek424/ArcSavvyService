@@ -118,7 +118,9 @@ exports.authenticateUser = (req, res) => {
             } else {
               console.log(foundUser.verify);
               if (foundUser.verify) {
-                res.json({ success: false, message: 'Email verification still required.', code: 6});
+                if (foundUser.verify.code){
+                  res.json({ success: false, message: 'Email verification still required.', code: 6});
+                }
               } else {
                 foundUser.password = null;
                 foundUser.verify = null;
