@@ -200,7 +200,7 @@ exports.verifyUser = (req, res) => {
             email: req.body.email
           },
           {
-            $unset: { verify: { attempts: -1, code: -1 } } // Was 'null' instead of 'true'
+            $unset: { verify: 1 } // Was 'null' instead of 'true'
           },
           {
             multi: true, safe: true
