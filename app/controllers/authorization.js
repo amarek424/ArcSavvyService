@@ -377,7 +377,7 @@ exports.logoutUser = (req, res) => {
     console.log(oldList);
     console.log(req.headers.authorization);
 
-    console.log(user.tokenWhitelist);
+    console.log(user);
 
     var index = oldList.indexOf(helpers.generateWhitehash(req.headers.authorization));
     if (index > -1) {
