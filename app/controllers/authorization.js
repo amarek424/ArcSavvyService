@@ -315,6 +315,7 @@ exports.resetPassword = (req, res) => {
       resetUser.reset_password_expires = undefined;
       resetUser.save(function(err) {
         if (err) {
+          console.log(err);
           return res.status(422).send({
             success: false, message: 'Password reset failed.'
           });
