@@ -116,7 +116,6 @@ exports.authenticateUser = (req, res) => {
             if (err || foundUser == null){
               res.json({ success: false, message: 'Authentication failed. server error.'});
             } else {
-              console.log(foundUser);
               if (foundUser.verify.code) {
                 res.json({ success: true, message: 'Email verification still required.', code: 6});
               } else {
@@ -301,9 +300,7 @@ exports.forgotPassword = (req, res) => {
 // resets the users password
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
-  console.log(req.body);
-  // , reset_password_expires: {$gt: Date.now()}
-  user.findOne({reset_password_token: req.body.token}).exec(function(err, resetUser) {
+  user.findOne({reset_password_token: req.body.token, reset_password_expires: {$gt: Date.now()}).exec(function(err, resetUser) {
     if(err || resetUser == null){
       res.json({ success: false, message: 'Token bad or expired!'});
     }
@@ -351,12 +348,10 @@ exports.resetPassword = (req, res) => {
 exports.checkEmailExists = (req, res) => {
   user.findOne({email: req.body.email}).exec(function(err, foundAccount) {
     if (err){
-      console.log(err);
       res.json({ success: true, message: 'Error: please try again'});
     }
     
     if (foundAccount == null || foundAccount == undefined) {
-      console.log("Available");
       res.json({ success: true, message: 'Email available'});
     } else {
       res.json({ success: false, message: 'Email already exists'});
@@ -376,11 +371,11 @@ exports.logoutUser = (req, res) => {
       return res.json({ success: false, message: 'Logout failed!'});
     }
     // ADD FUNCTION TO REMOVE FROM WHITELIST
-    console.log("Before: " + foundUser.tokenWhitelist);
+    // console.log("Before: " + foundUser.tokenWhitelist);
     foundUser.tokenWhitelist = []; // Logging out ALL devices
     //foundUser.tokenWhitelist = helpers.removeFromWhitelist(foundUser, req.headers.authorization);
     foundUser.save();
-    console.log("After: " + foundUser.tokenWhitelist);
+    // console.log("After: " + foundUser.tokenWhitelist);
     return res.json({ success: true, message: 'Bye.'});
   });
 }
