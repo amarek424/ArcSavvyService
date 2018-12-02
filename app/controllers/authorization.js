@@ -339,6 +339,10 @@ exports.resetPassword = (req, res) => {
           });
         }
       });
+    } else {
+      return res.json({
+        success: false, message: 'Password do not match.'
+      });
     }
   });
 };
