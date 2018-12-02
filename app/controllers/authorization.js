@@ -329,11 +329,11 @@ exports.resetPassword = (req, res) => {
 
           mailgun.messages().send(message, function (err, body){
             if (err){
-              return res.status(422).send({
+              return res.json({
                 success: false, message: 'Error reseting your password.'
               });
             }
-            return res.status(200).send({
+            return res.json({
               success: true, message: 'Password reset successful.'
             });
           });
