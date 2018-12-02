@@ -1,6 +1,7 @@
 const cryptoRandomString = require('crypto-random-string');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
+var passport = require('passport');
 
 // Generates a random hash and makes sure it doesn't match any of the existing
 exports.generateWhitehash = function(user) {
