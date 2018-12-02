@@ -310,35 +310,43 @@ exports.resetPassword = (req, res) => {
     // check if the two passwords in the form match before continuing
     if (req.body.newPassword === req.body.verifyPassword){
       // Set the new user attributes and save to db
-      resetUser.password = req.body.newPassword;
-      resetUser.reset_password_token = undefined;
-      resetUser.reset_password_expires = undefined;
-      resetUser.save(function(err) {
-        if (err) {
-          console.log(err);
-          return res.status(422).send({
-            success: false, message: 'Password reset failed.'
-          });
-        } else {
-          // If everything is successful, send the email confirming the change
-          var message = {
-            from: 'ArcSavvy <amarek424@gmail.com>',
-            to: resetUser.email,
-            subject: 'ArcSavvy Password Reset Confirmation',
-            html: '<h2>Your password has been reset!</h2'
-          };
+      user.findOneAndUpdate({ reset_password_token: req.body.token },
+        {
+          $unset: {
+            reset_password_token: 1,
+            reset_password_expires: 1
+          }
+        }, function(err, forgetfulUser) {
+          if (err || forgetfulUser == null){
+            return res.json({ success: true, message: 'User lookup error'});
+          } else {
+            if (err) {
+              console.log(err);
+              return res.status(422).send({
+                success: false, message: 'Password reset failed.'
+              });
+            } else {
+              // If everything is successful, send the email confirming the change
+              var message = {
+                from: 'ArcSavvy <amarek424@gmail.com>',
+                to: resetUser.email,
+                subject: 'ArcSavvy Password Reset Confirmation',
+                html: '<h2>Your password has been reset!</h2'
+              };
 
-          mailgun.messages().send(message, function (err, body){
-            if (err){
-              return res.json({
-                success: false, message: 'Error reseting your password.'
+              mailgun.messages().send(message, function (err, body){
+                if (err){
+                  return res.json({
+                    success: false, message: 'Error reseting your password.'
+                  });
+                }
+                return res.json({
+                  success: true, message: 'Password reset successful.'
+                });
               });
             }
-            return res.json({
-              success: true, message: 'Password reset successful.'
-            });
-          });
-        }
+          }
+        done(err, token, forgetfulUser);
       });
     }
   });
