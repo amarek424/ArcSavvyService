@@ -372,7 +372,16 @@ exports.logoutUser = (req, res) => {
     }
     // ADD FUNCTION TO REMOVE FROM WHITELIST
     // console.log("Before: " + foundUser.tokenWhitelist);
-    foundUser.tokenWhitelist = []; // Logging out ALL devices
+    // foundUser.tokenWhitelist = []; // Logging out ALL devices
+    var oldList = foundUser.tokenWhitelist;
+    console.log(oldList);
+    console.log(req.headers.authorization);
+    var index = oldList.indexOf(req.headers.authorization);
+    if (index > -1) {
+      oldList.splice(index, 1);
+    }
+    console.log(oldList);
+    foundUser.tokenWhitelist = oldList;
     //foundUser.tokenWhitelist = helpers.removeFromWhitelist(foundUser, req.headers.authorization);
     foundUser.save();
     // console.log("After: " + foundUser.tokenWhitelist);
