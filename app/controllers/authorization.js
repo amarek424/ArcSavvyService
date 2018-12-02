@@ -301,7 +301,7 @@ exports.forgotPassword = (req, res) => {
 // resets the users password
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
-  console.log(res.body);
+  console.log(req.body);
   user.findOne({reset_password_token: req.body.token, reset_password_expires: {
       $gt: Date.now()
     }}).exec(function(err, resetUser) {
@@ -322,7 +322,7 @@ exports.resetPassword = (req, res) => {
         } else {
           // If everything is successful, send the email confirming the change
           var message = {
-            from: 'ArcSavvy <bdor528@gmail.com>',
+            from: 'ArcSavvy <amarek424@gmail.com>',
             to: resetUser.email,
             subject: 'ArcSavvy Password Reset Confirmation',
             html: '<h2>Your password has been reset!</h2'
