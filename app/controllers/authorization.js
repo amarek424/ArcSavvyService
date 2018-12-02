@@ -302,9 +302,8 @@ exports.forgotPassword = (req, res) => {
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
   console.log(req.body);
-  user.findOne({reset_password_token: req.body.token, reset_password_expires: {
-      $gt: Date.now()
-    }}).exec(function(err, resetUser) {
+  // , reset_password_expires: {$gt: Date.now()}
+  user.findOne({reset_password_token: req.body.token}).exec(function(err, resetUser) {
     if(err || resetUser == null){
       res.json({ success: false, message: 'Token bad or expired!'});
     }
