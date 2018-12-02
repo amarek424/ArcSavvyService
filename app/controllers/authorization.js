@@ -118,7 +118,7 @@ exports.authenticateUser = (req, res) => {
             } else {
               console.log(foundUser);
               if (foundUser.verify.code) {
-                res.json({ success: false, message: 'Email verification still required.', code: 6});
+                res.json({ success: true, message: 'Email verification still required.', code: 6});
               } else {
                 foundUser.password = null;
                 foundUser.verify = null;
@@ -301,6 +301,7 @@ exports.forgotPassword = (req, res) => {
 // resets the users password
 exports.resetPassword = (req, res) => {
   // find the user based on the email they enter and the token they have
+  console.log(res.body);
   user.findOne({reset_password_token: req.body.token, reset_password_expires: {
       $gt: Date.now()
     }}).exec(function(err, resetUser) {
