@@ -23,15 +23,7 @@ exports.removeFromWhitelist = function(user, hash) {
 
 
 exports.getObjectFromJwt = function(token) {
- var opts = {};
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
-  opts.secretOrKey = process.env.secret;
-  opts.passReqToCallback = true;
-  opts.passReqToCallback = true;
-  console.log('token ' + token);
-  JwtStrategy(opts, function(err, jwt_payload) {
-  	console.log(err);
-  	console.log(jwt_payload);
-    return jwt_payload;
-  });
+	var base64Url = token.split('.')[1];
+	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	return JSON.parse(window.atob(base64));
 }
