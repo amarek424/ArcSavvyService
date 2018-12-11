@@ -375,11 +375,11 @@ exports.logoutUser = (req, res) => {
     // foundUser.tokenWhitelist = []; // Logging out ALL devices
     var oldList = foundUser.tokenWhitelist;
     console.log(oldList);
-    console.log(req.user);
+    // console.log(req.user);
 
-    console.log(helpers.getObjectFromJwt(req.headers.authorization));
+    var logoutToken = helpers.getObjectFromJwt(req.headers.authorization);
 
-    var index = oldList.indexOf(helpers.generateWhitehash(req.headers.authorization));
+    var index = oldList.indexOf(helpers.generateWhitehash(logoutToken));
     if (index > -1) {
       oldList.splice(index, 1);
     }
