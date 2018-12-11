@@ -370,25 +370,18 @@ exports.logoutUser = (req, res) => {
     if (err || foundUser == null){
       return res.json({ success: false, message: 'Logout failed!'});
     }
-    // ADD FUNCTION TO REMOVE FROM WHITELIST
-    // console.log("Before: " + foundUser.tokenWhitelist);
-    // foundUser.tokenWhitelist = []; // Logging out ALL devices
+    
     var oldList = foundUser.tokenWhitelist;
-    console.log(oldList);
-    // console.log(req.user);
 
     var logoutToken = helpers.getObjectFromJwt(req.headers.authorization).tokenWhitelist[0];
-    console.log(logoutToken);
     var index = oldList.indexOf(logoutToken);
-    console.log(index);
     if (index > -1) {
       oldList.splice(index, 1);
     }
-    console.log(oldList);
+
     foundUser.tokenWhitelist = oldList;
-    //foundUser.tokenWhitelist = helpers.removeFromWhitelist(foundUser, req.headers.authorization);
     foundUser.save();
-    // console.log("After: " + foundUser.tokenWhitelist);
+
     return res.json({ success: true, message: 'Bye.'});
   });
 }
