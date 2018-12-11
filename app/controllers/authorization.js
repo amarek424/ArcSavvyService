@@ -375,7 +375,7 @@ exports.logoutUser = (req, res) => {
     // foundUser.tokenWhitelist = []; // Logging out ALL devices
     var oldList = foundUser.tokenWhitelist;
     console.log(oldList);
-    console.log(req.headers.authorization);
+    console.log(req.user);
 
     console.log(helpers.getObjectFromJwt(req.headers.authorization));
 
