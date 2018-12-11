@@ -28,8 +28,9 @@ var opts = {};
   opts.secretOrKey = process.env.secret;
   opts.passReqToCallback = true;
   opts.passReqToCallback = true;
-
+  console.log('token ' + token);
   passport.use(new JwtStrategy(opts, function(jwt_payload) {
+  	console.log(jwt_payload);
     return jwt_payload;
   }));
 }
