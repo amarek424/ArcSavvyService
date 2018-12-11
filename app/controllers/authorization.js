@@ -377,7 +377,7 @@ exports.logoutUser = (req, res) => {
     console.log(oldList);
     // console.log(req.user);
 
-    var logoutToken = helpers.getObjectFromJwt(req.headers.authorization)[0];
+    var logoutToken = helpers.getObjectFromJwt(req.headers.authorization).tokenWhitelist[0];
     console.log(logoutToken);
     var index = oldList.indexOf(helpers.generateWhitehash(logoutToken));
     if (index > -1) {
