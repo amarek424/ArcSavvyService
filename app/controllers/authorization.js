@@ -380,6 +380,7 @@ exports.logoutUser = (req, res) => {
     var logoutToken = helpers.getObjectFromJwt(req.headers.authorization).tokenWhitelist[0];
     console.log(logoutToken);
     var index = oldList.indexOf(logoutToken);
+    console.log(index);
     if (index > -1) {
       oldList = oldList.splice(index, 1);
     }
