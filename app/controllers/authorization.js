@@ -381,7 +381,7 @@ exports.logoutUser = (req, res) => {
     console.log(logoutToken);
     var index = oldList.indexOf(helpers.generateWhitehash(logoutToken));
     if (index > -1) {
-      oldList.splice(index, 1);
+      oldList = oldList.splice(index, 1);
     }
     console.log(oldList);
     foundUser.tokenWhitelist = oldList;
