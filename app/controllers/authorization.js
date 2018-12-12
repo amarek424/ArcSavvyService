@@ -96,7 +96,7 @@ exports.authenticateUser = (req, res) => {
     if (!user){
       res.send({success: false, message: 'Authentication failed. User not found.'});
     } else {
-      // CHeck the password, user just passed
+      // Check the password, user just passed
       foundUser.comparePassword(req.body.password, function(err, isMatch){
 
         if (isMatch && !err){
@@ -109,30 +109,34 @@ exports.authenticateUser = (req, res) => {
 
           foundUser.tokenWhitelist.push(whitehash);
 
-          user.findOneAndUpdate({ email: foundUser.email },
-          {
-            $set: { tokenWhitelist: foundUser.tokenWhitelist }
-          }, function(err, foundUser) {
-            if (err || foundUser == null){
-              res.json({ success: false, message: 'Authentication failed. server error.'});
-            } else {
-              if (foundUser.verify.code) {
-                res.json({ success: true, message: 'Email verification still required.', code: 6});
+          if (foundUser.isDeactivated) {
+            res.json({ success: false, message: 'Account deactivated.'});
+          } else {
+            user.findOneAndUpdate({ email: foundUser.email },
+            {
+              $set: { tokenWhitelist: foundUser.tokenWhitelist }
+            }, function(err, foundUser) {
+              if (err || foundUser == null){
+                res.json({ success: false, message: 'Authentication failed. server error.'});
               } else {
-                foundUser.password = null;
-                foundUser.verify = null;
-                foundUser.loggedIn = null;
-                foundUser.tokenWhitelist = whitehash;
+                if (foundUser.verify.code) {
+                  res.json({ success: true, message: 'Email verification still required.', code: 6});
+                } else {
+                  foundUser.password = null;
+                  foundUser.verify = null;
+                  foundUser.loggedIn = null;
+                  foundUser.tokenWhitelist = whitehash;
 
-                userJson = foundUser.toJSON();
-                var token = jwt.sign(userJson, process.env.secret, {
-                  expiresIn: 3600
-                });
+                  userJson = foundUser.toJSON();
+                  var token = jwt.sign(userJson, process.env.secret, {
+                    expiresIn: 3600
+                  });
 
-                res.json({ success: true, token: 'JWT ' + token});
+                  res.json({ success: true, token: 'JWT ' + token});
+                }
               }
-            }
-          });
+            });
+          }
         } else {
           //password doesnt match
           res.json({ success: false, message: 'Authentication failed. No password match.'});
