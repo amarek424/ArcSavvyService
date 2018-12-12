@@ -402,7 +402,7 @@ exports.deactivateUser = (req, res) => {
       } else {
         var message = {
           from: 'ArcSavvy <amarek424@gmail.com>',
-          to: resetUser.email,
+          to: deactivateUser.email,
           subject: 'ArcSavvy Account Deactivated',
           html: '<h2>We\'re sorry to see you go!</h2><p>Your account has been deactivated.</p>'
         };
