@@ -385,3 +385,39 @@ exports.logoutUser = (req, res) => {
     return res.json({ success: true, message: 'Bye.'});
   });
 }
+
+exports.deactivateUser = (req, res) => {
+  var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
+  user.findOne({email: tokenUser.email}).exec(function(err, deactivateUser) {
+    if(err || deactivateUser == null){
+      res.json({ success: false, message: 'Could not deactivate user.'});
+    }
+
+    deactivateUser.idDeactivated = true;
+    deactivateUser.save(function(err) {
+      if (err) {
+        return res.status(422).send({
+          success: false, message: 'Deactivate account failed.'
+        });
+      } else {
+        var message = {
+          from: 'ArcSavvy <amarek424@gmail.com>',
+          to: resetUser.email,
+          subject: 'ArcSavvy Account Deactivated',
+          html: '<h2>We\'re sorry to see you go!</h2><p>Your account has been deactivated.</p>'
+        };
+
+        mailgun.messages().send(message, function (err, body){
+          if (err){
+            return res.json({
+              success: false, message: 'Deactivate account failed.'
+            });
+          }
+          return res.json({
+            success: true, message: 'Account deactivated.'
+          });
+        });
+      }
+    });
+  });
+}

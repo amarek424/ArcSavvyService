@@ -48,6 +48,10 @@ var UserSchema = new mongoose.Schema({
 	reset_password_expires: {
 		type: Date,
 		required: false
+	},
+	isDeactivated: {
+		type: Boolean,
+		default: false
 	}
 }, {
 	timestamps: true // DB fields createdAt/updatedAt

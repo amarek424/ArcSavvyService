@@ -18,19 +18,19 @@ module.exports = function(passport){
         return;
       }
       if (user){
-          // console.log("Here: " + jwt_payload.tokenWhitelist);
-          // console.log("User: " + user.tokenWhitelist);
-          if (user.tokenWhitelist.indexOf(jwt_payload.tokenWhitelist) > -1) {
-            // console.log("No problem");
-            done(null, user);
-            return;
+          if (user.deactivated) {
+            if (user.tokenWhitelist.indexOf(jwt_payload.tokenWhitelist) > -1) {
+              done(null, user);
+              return;
+            } else {
+              done(null, false);
+              return;
+            }
           } else {
-            // console.log("No dice");
             done(null, false);
             return;
           }
       } else {
-        // console.log("Not a chance");
         done(null, false);
         return;
       }
