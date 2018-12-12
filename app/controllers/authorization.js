@@ -108,7 +108,7 @@ exports.authenticateUser = (req, res) => {
           }
 
           foundUser.tokenWhitelist.push(whitehash);
-
+          console.log(foundUser);
           if (foundUser.isDeactivated) {
             console.log('here' + foundUser.isDeactivated);
             res.json({ success: false, message: 'Account deactivated.'});
