@@ -51,7 +51,7 @@ var UserSchema = new mongoose.Schema({
 	},
 	isDeactivated: {
 		type: Boolean,
-		default: true
+		required: false
 	}
 }, {
 	timestamps: true // DB fields createdAt/updatedAt
