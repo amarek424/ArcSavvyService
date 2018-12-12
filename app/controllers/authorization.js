@@ -110,6 +110,7 @@ exports.authenticateUser = (req, res) => {
           foundUser.tokenWhitelist.push(whitehash);
 
           if (foundUser.isDeactivated) {
+            console.log('here' + foundUser.isDeactivated);
             res.json({ success: false, message: 'Account deactivated.'});
           } else {
             user.findOneAndUpdate({ email: foundUser.email },
@@ -397,7 +398,7 @@ exports.deactivateUser = (req, res) => {
       res.json({ success: false, message: 'Could not deactivate user.'});
     }
 
-    deactivateUser.idDeactivated = true;
+    deactivateUser.isDeactivated = true;
     console.log(deactivateUser.isDeactivated);
     deactivateUser.save(function(err) {
       if (err) {
