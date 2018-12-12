@@ -394,6 +394,7 @@ exports.deactivateUser = (req, res) => {
     }
 
     deactivateUser.idDeactivated = true;
+    console.log(deactivateUser.isDeactivated);
     deactivateUser.save(function(err) {
       if (err) {
         return res.status(422).send({
