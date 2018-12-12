@@ -19,6 +19,9 @@ module.exports = function(passport){
       }
       if (user){
           if (user.deactivated) {
+            done(null, false);
+            return;
+          } else {
             if (user.tokenWhitelist.indexOf(jwt_payload.tokenWhitelist) > -1) {
               done(null, user);
               return;
@@ -26,9 +29,7 @@ module.exports = function(passport){
               done(null, false);
               return;
             }
-          } else {
-            done(null, false);
-            return;
+            
           }
       } else {
         done(null, false);
