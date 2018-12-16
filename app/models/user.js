@@ -18,8 +18,7 @@ var UserSchema = new mongoose.Schema({
 	},
 	role: {
 		type: [String],
-		enum: ['user'],
-		default: 'user'
+		default: ['user']
 	},
 	loggedIn: {
 		type: Boolean,
