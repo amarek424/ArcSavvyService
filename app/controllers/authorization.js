@@ -109,34 +109,39 @@ exports.authenticateUser = (req, res) => {
 
           foundUser.tokenWhitelist.push(whitehash);
 
-          if (foundUser.isDeactivated) {
-            res.json({ success: false, message: 'Account deactivated.'});
-          } else {
-            user.findOneAndUpdate({ email: foundUser.email },
+          // if (foundUser.isDeactivated) {
+          //   res.json({ success: false, message: 'Account deactivated.'});
+          // } else {
+            user.findOneAndUpdate({ _id: foundUser._id },
             {
-              $set: { tokenWhitelist: foundUser.tokenWhitelist }
-            }, function(err, foundUser) {
-              if (err || foundUser == null){
+              $set: { tokenWhitelist: loginUser.tokenWhitelist },
+              $unset: { isDeactivated: false }
+            }, function(err, loginUser) {
+              if (err || loginUser == null){
                 res.json({ success: false, message: 'Authentication failed. server error.'});
               } else {
-                if (foundUser.verify.code) {
+                if (loginUser.verify.code) {
                   res.json({ success: true, message: 'Email verification still required.', code: 6});
                 } else {
-                  foundUser.password = null;
-                  foundUser.verify = null;
-                  foundUser.loggedIn = null;
-                  foundUser.tokenWhitelist = whitehash;
+                  loginUser.password = null;
+                  loginUser.verify = null;
+                  loginUser.loggedIn = null;
+                  loginUser.tokenWhitelist = whitehash;
 
-                  userJson = foundUser.toJSON();
+                  userJson = loginUser.toJSON();
                   var token = jwt.sign(userJson, process.env.secret, {
                     expiresIn: 3600
                   });
 
-                  res.json({ success: true, token: 'JWT ' + token});
+                  if (foundUser.isDeactivated) {
+                    res.json({ success: true, message: 'Account Reactivated.', token: 'JWT ' + token});
+                  } else {
+                    res.json({ success: true, token: 'JWT ' + token});
+                  }
                 }
               }
             });
-          }
+          // }
         } else {
           //password doesnt match
           res.json({ success: false, message: 'Authentication failed. No password match.'});
@@ -425,3 +430,40 @@ exports.deactivateUser = (req, res) => {
     });
   });
 }
+
+exports.reactivateUser = (req, res) => {
+  var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
+  user.findOne({email: tokenUser.email}).exec(function(err, deactivateUser) {
+    if(err || deactivateUser == null){
+      res.json({ success: false, message: 'Could not deactivate user.'});
+    }
+
+    deactivateUser.isDeactivated = true;
+    deactivateUser.save(function(err) {
+      if (err) {
+        return res.status(422).send({
+          success: false, message: 'Deactivate account failed.'
+        });
+      } else {
+        var message = {
+          from: 'ArcSavvy <amarek424@gmail.com>',
+          to: deactivateUser.email,
+          subject: 'ArcSavvy Account Deactivated',
+          html: '<h2>We\'re sorry to see you go!</h2><p>Your account has been deactivated.</p>'
+        };
+
+        mailgun.messages().send(message, function (err, body){
+          if (err){
+            return res.json({
+              success: false, message: 'Deactivate account failed.'
+            });
+          }
+          return res.json({
+            success: true, message: 'Account deactivated.'
+          });
+        });
+      }
+    });
+  });
+}
+
