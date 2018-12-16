@@ -395,6 +395,9 @@ exports.logoutUser = (req, res) => {
   });
 }
 
+// Deactivate User
+// Deactivates a user account by setting isDeactivated flag and removing all login tokens.
+// Automatically reactivates after next login.
 exports.deactivateUser = (req, res) => {
   var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
   user.findOne({email: tokenUser.email}).exec(function(err, deactivateUser) {
