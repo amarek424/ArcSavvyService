@@ -25,7 +25,7 @@ module.exports = function(app) {
 	authRoutes.post('/emailexists', AuthController.checkEmailExists);
 	authRoutes.post('/logout', passport.authenticate('jwt', {session: false}), AuthController.logoutUser);
 	authRoutes.post('/deactivate', passport.authenticate('jwt', {session: false}), AuthController.deactivateUser);
-	authRoutes.post('/checkAuthStatus', passport.authenticate('jwt', {session: false}), AuthController.logoutUser);
+	authRoutes.post('/checkAuthStatus', passport.authenticate('jwt', {session: false}), AuthController.checkAuthStatus);
 
 	// Perform user/profile related stuff
 	apiRoutes.use('/profile', passport.authenticate('jwt', {session: false}), profileRoutes);
