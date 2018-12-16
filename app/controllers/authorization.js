@@ -435,3 +435,9 @@ exports.deactivateUser = (req, res) => {
   });
 }
 
+// Check Auth Token
+// Checks is an account is logged in with a given auth token
+exports.checkAuthStatus = (req, res) => {
+  return res.json({success: true, message: 'Token still active.'});
+}
+
