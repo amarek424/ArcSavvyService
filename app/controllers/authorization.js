@@ -114,7 +114,7 @@ exports.authenticateUser = (req, res) => {
           // } else {
             user.findOneAndUpdate({ _id: foundUser._id },
             {
-              $set: { tokenWhitelist: loginUser.tokenWhitelist },
+              $set: { tokenWhitelist: foundUser.tokenWhitelist },
               $unset: { isDeactivated: false }
             }, function(err, loginUser) {
               if (err || loginUser == null){
