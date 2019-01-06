@@ -36,7 +36,7 @@ exports.getUser = (req, res, next) => {
 	});
 }
 
-//add an address to a user
+//update user address
 exports.setAddress = (req, res, next) => {
 	var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
 	user.findOneAndUpdate({ _id: tokenUser._id },
@@ -51,6 +51,22 @@ exports.setAddress = (req, res, next) => {
         res.json({ success: false, message: 'Address update failed.'});
       } else {
         res.json({ success: true, message: 'Address added successfully'});
+      }
+    });
+}
+
+//update a users name
+exports.setAddress = (req, res, next) => {
+	var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
+	user.findOneAndUpdate({ _id: tokenUser._id },
+    {
+      $set: { 'firstName': req.body.firstname,
+      		  'lastName': req.body.lastname }
+    }, function(err, foundUser) {
+      if (err || foundUser == null){
+        res.json({ success: false, message: 'Name update failed.'});
+      } else {
+        res.json({ success: true, message: 'Name added successfully'});
       }
     });
 }

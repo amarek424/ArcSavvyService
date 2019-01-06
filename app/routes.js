@@ -34,5 +34,7 @@ module.exports = function(app) {
 	profileRoutes.get('/users', UserController.getUsers);
 	profileRoutes.get('/user/:email', UserController.getUser);
 	profileRoutes.post('/updateaddress', UserController.setAddress);
+	profileRoutes.post('/updatename', UserController.setName);
+
 
 }
