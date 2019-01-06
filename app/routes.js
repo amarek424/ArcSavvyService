@@ -36,5 +36,4 @@ module.exports = function(app) {
 	profileRoutes.post('/updateaddress', UserController.setAddress);
 	profileRoutes.post('/updatename', UserController.setName);
 
-
 }
