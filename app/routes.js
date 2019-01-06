@@ -33,6 +33,6 @@ module.exports = function(app) {
 	profileRoutes.get('/', UserController.getProfile); // Make this a function that returns current user instead
 	profileRoutes.get('/users', UserController.getUsers);
 	profileRoutes.get('/user/:email', UserController.getUser);
-	profileRoutes.post('/setaddress', UserController.setaddress);
+	profileRoutes.post('/setaddress', UserController.addAddress);
 
 }
