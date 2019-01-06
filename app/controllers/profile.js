@@ -48,11 +48,11 @@ exports.addAddress = (req, res, next) => {
 	var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
 	user.findOneAndUpdate({ _id: tokenUser._id },
     {
-      $set: { address.line1: req.body.line1,
-      		address.line2: req.body.line2,
-      		address.city: req.body.city,
-      		address.state: req.body.state,
-      		address.zip: req.body.zip
+      $set: { 'address.line1': req.body.line1,
+      		'address.line2': req.body.line2,
+      		'address.city': req.body.city,
+      		'address.state': req.body.state,
+      		'address.zip': req.body.zip
       		}
     }, function(err, foundUser) {
       if (err || foundUser == null){
