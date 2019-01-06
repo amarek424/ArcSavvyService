@@ -16,6 +16,28 @@ var UserSchema = new mongoose.Schema({
 		required: true,
 		// select: false
 	},
+	address: {
+		line1: {
+			type: String,
+			required: false
+		},
+		line2: {
+			type: String,
+			required: false
+		},
+		city: {
+			type: String,
+			required: false
+		},
+		state: {
+			type: String,
+			required: false
+		},
+		zip; {
+			type: String,
+			required: false
+		}
+	},
 	role: {
 		type: [String],
 		default: ['user']

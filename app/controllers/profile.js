@@ -34,3 +34,14 @@ exports.getUser = (req, res, next) => {
 		res.json(result);
 	});
 }
+
+//add an address to a user
+exports.addAddress = (req, res, next) => {
+	console.log('Setting address');
+	console.log(req.body.line1);
+	console.log(req.body.line2);
+	console.log(req.body.city);
+	console.log(req.body.state);
+	console.log(req.body.zip);
+	res.json({ success: true, message: 'Address set'});
+}
