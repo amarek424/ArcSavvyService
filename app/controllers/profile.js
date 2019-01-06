@@ -1,4 +1,5 @@
 const user = require('../models/user');
+const helpers = require('../helpers');
 
 // Returns all user's info
 exports.getUsers = (req, res, next) => {
@@ -43,5 +44,22 @@ exports.addAddress = (req, res, next) => {
 	console.log(req.body.city);
 	console.log(req.body.state);
 	console.log(req.body.zip);
-	res.json({ success: true, message: 'Address set'});
+
+	var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
+	user.findOneAndUpdate({ _id: tokenUser._id },
+    {
+      $set: { address.line1: req.body.line1,
+      		address.line2: req.body.line2,
+      		address.city: req.body.city,
+      		address.state: req.body.state,
+      		address.zip: req.body.zip
+      		}
+    }, function(err, foundUser) {
+      if (err || foundUser == null){
+        res.json({ success: false, message: 'Address update failed.'});
+      } else {
+        res.json({ success: true, message: 'Address added successfully'});
+      }
+    });
+
 }
