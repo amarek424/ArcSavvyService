@@ -56,7 +56,7 @@ exports.setAddress = (req, res, next) => {
 }
 
 //update a users name
-exports.setAddress = (req, res, next) => {
+exports.setName = (req, res, next) => {
 	var tokenUser = helpers.getObjectFromJwt(req.headers.authorization);
 	user.findOneAndUpdate({ _id: tokenUser._id },
     {
