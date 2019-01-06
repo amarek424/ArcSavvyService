@@ -330,7 +330,7 @@ exports.resetPassword = (req, res) => {
             from: 'ArcSavvy <amarek424@gmail.com>',
             to: resetUser.email,
             subject: 'ArcSavvy Password Reset Confirmation',
-            html: '<h2>Your password has been reset!</h2'
+            html: '<h2>Your password has been reset!</h2>'
           };
 
           mailgun.messages().send(message, function (err, body){
