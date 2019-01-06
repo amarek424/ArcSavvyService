@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Node.js API using Express",
 	"engines": {
-		"node": "8.9.1"
+		"node": "11.6.0"
 	},
 	"main": "server.js",
 	"scripts": {
