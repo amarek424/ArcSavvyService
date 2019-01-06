@@ -33,7 +33,7 @@ var UserSchema = new mongoose.Schema({
 			type: String,
 			required: false
 		},
-		zip; {
+		zip: {
 			type: String,
 			required: false
 		}
